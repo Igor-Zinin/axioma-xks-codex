@@ -1,6 +1,6 @@
 # game-codex — Playable Knowledge Factory
 
-[![selftest](https://github.com/Igorz1993/game-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igorz1993/game-codex/actions/workflows/selftest.yml)
+[![selftest](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE-CODE)
 [![knowledge: CC BY 4.0](https://img.shields.io/badge/knowledge-CC%20BY%204.0-lightgrey)](LICENSE)
 
@@ -63,7 +63,7 @@ No dependencies, no network, no database, no keys — just Node 18+.
 ## Quick start
 
 ```bash
-git clone https://github.com/Igorz1993/game-codex
+git clone https://github.com/Igor-Zinin/game-codex
 cd game-codex
 node selftest.mjs
 ```
