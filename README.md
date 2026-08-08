@@ -1,7 +1,8 @@
 # game-codex — Playable Knowledge Factory
 
 [![selftest](https://github.com/Igorz1993/game-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igorz1993/game-codex/actions/workflows/selftest.yml)
-[![license](https://img.shields.io/badge/license-Apache--2.0-lightgrey)](LICENSE)
+[![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE-CODE)
+[![knowledge: CC BY 4.0](https://img.shields.io/badge/knowledge-CC%20BY%204.0-lightgrey)](LICENSE)
 
 ---
 
@@ -86,11 +87,9 @@ packages/
 knowledge/
   pko/             ← PKO atoms: *.pko.json
 
-docs/
-  DAEMON-CAPABILITIES.md   ← factory capabilities reference
-  FORENSIC-MERGE-MAP.md    ← how 4 repos were merged into this one
-
 selftest.mjs       ← C-05: every claim has a check
+LICENSE            ← CC BY 4.0 — knowledge atoms, schemas, docs
+LICENSE-CODE       ← MIT — code
 ```
 
 ---
@@ -115,7 +114,8 @@ First PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/ch
 
 ## Donors (Phase A Forensic Merge Map)
 
-This repo is a merger of 4 existing repos. See [`docs/FORENSIC-MERGE-MAP.md`](docs/FORENSIC-MERGE-MAP.md) for the full classification (ADOPT / EXTRACT / ADAPT / ARCHIVE / REJECT) of all 63 assets.
+This repo is a merger of 4 existing repos. The full asset-by-asset classification
+(ADOPT / EXTRACT / ADAPT / ARCHIVE / REJECT) is not published.
 
 | Donor | Role | Key contribution |
 |---|---|---|
@@ -128,4 +128,13 @@ This repo is a merger of 4 existing repos. See [`docs/FORENSIC-MERGE-MAP.md`](do
 
 ## License
 
-Apache-2.0 for code. Knowledge atoms in `knowledge/` follow CC BY 4.0 where derived from CC BY sources.
+The repository is mixed, so there are two licenses — pick the one matching what you take.
+
+| What | License | File |
+|---|---|---|
+| **Code**: `selftest.mjs`, `packages/**`, `scripts`, build glue | **MIT** | [`LICENSE-CODE`](LICENSE-CODE) |
+| **Knowledge and texts**: `knowledge/**` PKO atoms, schemas, README | **CC BY 4.0** | [`LICENSE`](LICENSE) |
+
+Third-party material keeps its own terms. Authoritative references cited in the
+`evidence` layer of a PKO (FIDE Laws of Chess, papers) belong to their rights
+holders and are cited, not redistributed.
