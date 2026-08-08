@@ -4,13 +4,11 @@
   "private": true,
   "description": "Playable Knowledge Factory — turns verifiable knowledge into reproducible interactive artifacts",
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "packages/*"
   ],
   "scripts": {
     "selftest": "node selftest.mjs",
-    "validate:pko": "python packages/knowledge-api/validate.py",
-    "dev": "cd apps/web && npm run dev"
+    "sync:docs": "node scripts/sync-docs.mjs"
   },
   "engines": {
     "node": ">=18"

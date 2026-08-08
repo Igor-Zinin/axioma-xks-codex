@@ -31,14 +31,11 @@ function assert(condition, description) {
 console.log("\nGame Codex · selftest\n");
 
 // ── C-01: monorepo structure exists ──────────────────────────────────────────
-assert(existsSync(join(__dirname, "packages/knowledge-api/validate.py")),
-  "C-01 · knowledge-api/validate.py exists (Knowledge Layer)");
-
 assert(existsSync(join(__dirname, "packages/auditor/auditor.mjs")),
   "C-01 · packages/auditor/auditor.mjs exists (Auditor Layer)");
 
-assert(existsSync(join(__dirname, "packages/game-shell/PhaserGame.tsx")),
-  "C-01 · packages/game-shell/PhaserGame.tsx exists (Play Layer)");
+assert(typeof runAudit === "function",
+  "C-01 · auditor module actually loads and exports runAudit (not just a file on disk)");
 
 assert(existsSync(join(__dirname, "knowledge/pko")),
   "C-01 · knowledge/pko/ directory exists (PKO Canon)");
@@ -99,12 +96,45 @@ if (existsSync(README_PATH)) {
     "C-04 · README.md mentions CLAIM → CHECK pipeline");
 }
 
+// ── C-05: public page shows the PKO and does not fork the data ───────────────
+// docs/ отдаётся GitHub Pages как статика. Страница читает PKO из docs/data/,
+// поэтому копия обязана быть побайтово равна канону в knowledge/pko/.
+// Расхождение = второй источник правды и ловится здесь.
+const PAGE_PATH = join(__dirname, "docs/index.html");
+assert(existsSync(PAGE_PATH), "C-05 · docs/index.html exists (public page)");
+assert(existsSync(join(__dirname, "docs/style.css")), "C-05 · docs/style.css exists");
+
+if (existsSync(PAGE_PATH)) {
+  const page = readFileSync(PAGE_PATH, "utf-8");
+  assert(page.includes('fetch(SRC'),
+    "C-05 · page reads the PKO at runtime (data is fetched, not retyped into HTML)");
+
+  const srcMatch = page.match(/var SRC = "([^"]+)"/);
+  assert(!!srcMatch, "C-05 · page declares the PKO path it fetches");
+
+  if (srcMatch) {
+    const docsCopy = join(__dirname, "docs", srcMatch[1]);
+    assert(existsSync(docsCopy),
+      `C-05 · fetched file exists on disk (docs/${srcMatch[1]})`);
+
+    if (existsSync(docsCopy)) {
+      const canon = readFileSync(PKO_PATH);
+      const copy = readFileSync(docsCopy);
+      assert(canon.equals(copy),
+        "C-05 · docs/data copy is byte-identical to knowledge/pko canon (run: node scripts/sync-docs.mjs)");
+    }
+  }
+
+  assert(!/https?:\/\/(cdn|unpkg|cdnjs|fonts)\./.test(page),
+    "C-05 · page has no CDN or web-font dependency (opens offline)");
+}
+
 // ── Print results ─────────────────────────────────────────────────────────────
 for (const r of results) {
   console.log(`  ${r.ok ? "GREEN" : "RED  "} ${r.desc}`);
 }
 
-console.log(`\nclaims: 4 · assertions passed: ${passed} · failed: ${failed}\n`);
+console.log(`\nclaims: 5 · assertions passed: ${passed} · failed: ${failed}\n`);
 
 if (failed > 0) {
   console.log("🔴 selftest FAILED\n");
