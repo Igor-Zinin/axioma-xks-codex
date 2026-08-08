@@ -10,12 +10,12 @@
 flowchart LR
     A(["📚 KNOWLEDGE\n(Canon / Wiki)"])
     B(["⚙️ PKO\n(Playable Knowledge Object)"])
-    C(["▶ PLAY\n(Phaser3 mini-scene)"])
+    C(["▶ PAGE\n(docs/index.html)"])
     D(["✅ EVIDENCE\n(FIDE / authoritative ref)"])
     E(["🔒 CLAIM\n(acceptance_sql)"])
 
-    A -->|"validate.py CHECK"| B
-    B -->|"6 layers"| C
+    A -->|"auditor + selftest CHECK"| B
+    B -->|"6 layers, fetched as-is"| C
     B -->|"ref + proof"| D
     D -->|"machine criterion"| E
 
@@ -41,14 +41,14 @@ flowchart LR
 ## What is a PKO?
 
 A **Playable Knowledge Object (PKO)** is the minimum unit of this factory.
-One game rule → one PKO → seven representations of the same knowledge:
+One game rule → one PKO → six representations of the same knowledge:
 
 | Layer | Purpose |
 |---|---|
 | `answer` | Human-readable explanation |
 | `evidence` | Authoritative reference (FIDE rule, paper, etc.) |
 | `model` | Formal preconditions and logic |
-| `play` | Phaser3 interactive mini-scene config |
+| `play` | Mini-scene config (`phaser3-scene`) — position, task, solution. Renderer not built yet |
 | `quiz` | Questions to test understanding |
 | `machine` | `acceptance_sql` — machine-checkable criterion |
 
@@ -68,10 +68,11 @@ cd game-codex
 node selftest.mjs
 ```
 
-To validate all PKO atoms against the XKS schema:
+To read the object in a browser, serve the repo root and open `/docs/`
+(the page loads the PKO with `fetch`, so `file://` will not work):
 
 ```bash
-python packages/knowledge-api/validate.py
+python -m http.server 8000    # then http://localhost:8000/docs/
 ```
 
 ---
@@ -80,24 +81,53 @@ python packages/knowledge-api/validate.py
 
 ```
 packages/
-  knowledge-api/   ← XKS validator (from knowledge-matrix-contour)
   auditor/         ← PKO structural auditor (from DaemonTycoon)
-  game-shell/      ← Phaser3 Play-layer renderer (from Game)
 
 knowledge/
-  pko/             ← PKO atoms: *.pko.json
+  pko/             ← PKO atoms: *.pko.json — the canon
 
-selftest.mjs       ← C-05: every claim has a check
+docs/
+  index.html       ← public page: all 6 layers of one PKO, no framework, no CDN
+  style.css
+  data/            ← byte-copy of knowledge/pko for GitHub Pages; drift is caught by C-05
+
+scripts/
+  sync-docs.mjs    ← refreshes docs/data/ from the canon
+
+selftest.mjs       ← C-01…C-05: every claim has a check
 LICENSE            ← CC BY 4.0 — knowledge atoms, schemas, docs
 LICENSE-CODE       ← MIT — code
 ```
+
+`docs/data/` is a second copy of the same bytes, which is normally how a
+repository starts lying to itself. Here it cannot: `selftest.mjs` (C-05) compares
+it byte-for-byte with `knowledge/pko/` and goes red on any divergence. Run
+`node scripts/sync-docs.mjs` after editing a PKO.
+
+---
+
+## The public page
+
+[`docs/index.html`](docs/index.html) renders one PKO in full: claim, evidence with a
+link to the FIDE source, formal model, a static board position built from the `fen`
+field, quiz with hidden answers, and the machine criterion. Nothing is retyped into
+the HTML — every value is read from the `.pko.json` at runtime, and an empty field is
+drawn as a dash rather than filled in with a guess.
+
+GitHub Pages is **not enabled yet** — that switch belongs to the repository owner.
+When it is (source: branch `main`, folder `/`), the page will be served at
+`/game-codex/docs/`.
 
 ---
 
 ## What is not here
 
-- No full game engine — we use existing Phaser3.
+- No game engine and no interactive renderer yet. The `play` layer is currently a
+  scene *config* inside the PKO plus a static diagram on the public page. An engine
+  will be added when there is something that runs, not before.
 - No AI model — evidence must be authoritative (FIDE rules, papers, etc.).
+- No XKS schema validator. The Python one imported in Phase B arrived byte-corrupted
+  and was removed rather than left in place as a green-looking file that never parsed.
 - No external users yet. Zero. The first fork that runs the selftest will be the first.
 
 ---
@@ -109,20 +139,24 @@ First PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/ch
 **Claim:** En passant is a special pawn capture valid only on the turn immediately after an opponent's double pawn advance.
 **Evidence:** FIDE Laws of Chess 2023, Article 3.7(d).
 **Status:** All 6 layers complete. selftest GREEN.
+**Readable form:** [`docs/index.html`](docs/index.html) — the same object for a human, rendered from the same JSON.
 
 ---
 
 ## Donors (Phase A Forensic Merge Map)
 
-This repo is a merger of 4 existing repos. The full asset-by-asset classification
+This repo grew out of 4 private repos. The full asset-by-asset classification
 (ADOPT / EXTRACT / ADAPT / ARCHIVE / REJECT) is not published.
 
-| Donor | Role | Key contribution |
+Only what is actually in the tree is listed as taken — everything else is still
+sitting in the donors:
+
+| Donor | Role | Taken so far |
 |---|---|---|
-| `Game` | Public Shell | Phaser3 renderer, Next.js, NeoPanel UI |
-| `DaemonTycoon` | Factory OS | Auditor engine, Context Compiler |
-| `HeartStone-2` | Simulation | Combat kernel, MCP bridge |
-| `knowledge-matrix-contour` | Canon Source | XKS validator, 19k-node ontology graph |
+| `DaemonTycoon` | Factory OS | Auditor engine (`packages/auditor`) — reworked, Firebase/Telegram dependency stripped |
+| `knowledge-matrix-contour` | Canon Source | XKS ideas: layer set, provenance and decay stamps |
+| `Game` | Public Shell | nothing yet |
+| `HeartStone-2` | Simulation | nothing yet |
 
 ---
 

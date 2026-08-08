@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chess-en-passant-001 — Playable Knowledge Object</title>
+<meta name="description" content="Один объект знания в шести слоях: утверждение, доказательство, механизм, разыгрываемый пример, квиз и машинный критерий.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Game Codex · Playable Knowledge Object</p>
+  <h1 id="title">Объект знания</h1>
+  <p class="claim" id="claim">—</p>
+  <div class="meta" id="meta"></div>
+</header>
+
+<div class="state" id="loading">Загружаю объект из <code id="src-path">data/chess-en-passant-001.pko.json</code>…</div>
+
+<div class="state error" id="error" hidden>
+  <p><b>Данные не загрузились.</b> Страница ничего не выдумывает: без JSON показывать нечего.</p>
+  <p id="error-detail" class="mono"></p>
+  <p>Если файл открыт как <code>file://</code> — это ожидаемо: браузер запрещает <code>fetch</code> с локального диска.
+     Подними любой статический сервер в корне репозитория и открой <code>/docs/</code>.</p>
+</div>
+
+<main id="content" hidden>
+
+  <section class="layer" id="layer-answer">
+    <h2><span class="n">1</span>answer · утверждение</h2>
+    <p class="sub">Что это, человеческими словами.</p>
+    <p id="answer-text">—</p>
+    <p class="kv"><b>язык:</b> <span id="answer-lang">—</span> · <b>уровень:</b> <span id="answer-level">—</span></p>
+  </section>
+
+  <section class="layer" id="layer-evidence">
+    <h2><span class="n">2</span>evidence · доказательство</h2>
+    <p class="sub">Первоисточник, а не пересказ. Цитируется, а не перепечатывается.</p>
+    <blockquote id="ev-quote">—</blockquote>
+    <p class="kv"><b>раздел:</b> <span id="ev-section">—</span></p>
+    <p class="kv"><b>тип:</b> <span id="ev-type">—</span></p>
+    <p class="kv"><b>источник:</b> <span id="ev-ref">—</span></p>
+  </section>
+
+  <section class="layer" id="layer-model">
+    <h2><span class="n">3</span>model · механизм</h2>
+    <p class="sub">Формальные предусловия — то, по чему правило можно проверить машиной.</p>
+    <p id="model-desc">—</p>
+    <ul class="pre-list" id="model-pre"></ul>
+    <p class="kv"><b>результат:</b> <span id="model-result">—</span></p>
+  </section>
+
+  <section class="layer" id="layer-play">
+    <h2><span class="n">4</span>play · разыгрываемый пример</h2>
+    <p class="sub">Позиция собрана из поля <code>fen</code> этого же объекта. Диаграмма статичная.</p>
+    <p id="play-instruction">—</p>
+    <div class="board-outer"><div class="board" id="board"></div></div>
+    <p class="legend" id="play-legend">—</p>
+    <p class="kv"><b>решение:</b> <span id="play-solution">—</span></p>
+    <p class="kv"><b>верно:</b> <span id="play-success">—</span></p>
+    <p class="kv"><b>неверно:</b> <span id="play-fail">—</span></p>
+  </section>
+
+  <section class="layer" id="layer-quiz">
+    <h2><span class="n">5</span>quiz · проверка понимания</h2>
+    <p class="sub">Ответ спрятан под раскрытие — сначала подумай.</p>
+    <div id="quiz"></div>
+  </section>
+
+  <section class="layer" id="layer-machine">
+    <h2><span class="n">6</span>machine · машинный критерий</h2>
+    <p class="sub">Утверждение, у которого есть исполняемая проверка. Здесь она видна целиком.</p>
+    <p class="kv"><b>утверждение selftest:</b> <span id="m-assert">—</span></p>
+    <pre id="m-sql">—</pre>
+    <p class="kv" id="m-note-row"><b>оговорка:</b> <span id="m-note">—</span></p>
+  </section>
+
+</main>
+
+<footer>
+  <p class="eyebrow">Код объекта</p>
+  <div class="idbox mono" id="pko-id">—</div>
+  <p><b>Машиночитаемое представление:</b> <a id="json-link" href="data/chess-en-passant-001.pko.json">chess-en-passant-001.pko.json</a> — та самая единственная копия данных, из которой собрана эта страница.</p>
+  <p><b>Достоверность:</b> <span id="f-confidence">—</span> · <b>источник утверждения:</b> <span id="f-source">—</span> (<span id="f-stamp">—</span>)</p>
+  <p><b>Перепроверить:</b> <span id="f-decay">—</span></p>
+  <p><b>Формат:</b> XKS <span id="f-xks">—</span> · <b>игра:</b> <span id="f-game">—</span> · <b>область:</b> <span id="f-domain">—</span></p>
+  <p>Знание — CC BY 4.0, код — MIT. Цитата из правил ФИДЕ принадлежит правообладателю и приведена как ссылка, а не как перепечатка.</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SRC = "data/chess-en-passant-001.pko.json";
+  var DASH = "—";
+
+  // Пустое поле рисуется прочерком. Выдумывать содержимое запрещено.
+  function put(id, value) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var s = (value === 0 || value) ? String(value).trim() : "";
+    if (!s) { el.textContent = DASH; el.classList.add("dash"); return; }
+    el.textContent = s;
+    el.classList.remove("dash");
+  }
+
+  function chip(text) {
+    var d = document.createElement("span");
+    d.className = "chip";
+    d.textContent = text;
+    return d;
+  }
+
+  var GLYPH = {
+    p: "♟", n: "♞", b: "♝", r: "♜", q: "♛", k: "♚",
+    P: "♙", N: "♘", B: "♗", R: "♖", Q: "♕", K: "♔"
+  };
+  var FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+  function drawBoard(fen, highlight) {
+    var board = document.getElementById("board");
+    board.textContent = "";
+    if (!fen) {
+      var none = document.createElement("p");
+      none.className = "dash";
+      none.textContent = DASH;
+      board.parentNode.replaceChild(none, board);
+      return;
+    }
+    var rows = String(fen).split(" ")[0].split("/");
+    var hl = {};
+    (highlight || []).forEach(function (s) { hl[String(s).toLowerCase()] = true; });
+
+    for (var r = 0; r < 8; r++) {
+      var rankNo = 8 - r;
+      var lbl = document.createElement("div");
+      lbl.className = "coord";
+      lbl.textContent = rankNo;
+      board.appendChild(lbl);
+
+      var expanded = "";
+      var raw = rows[r] || "8";
+      for (var i = 0; i < raw.length; i++) {
+        var ch = raw[i];
+        if (ch >= "1" && ch <= "8") { expanded += new Array(Number(ch) + 1).join("."); }
+        else { expanded += ch; }
+      }
+      for (var f = 0; f < 8; f++) {
+        var piece = expanded[f] || ".";
+        var name = FILES[f] + rankNo;
+        var sq = document.createElement("div");
+        sq.className = "sq " + ((r + f) % 2 === 0 ? "light" : "dark");
+        if (hl[name]) sq.className += " hl";
+        if (piece !== ".") {
+          sq.className += piece === piece.toUpperCase() ? " white-piece" : " black-piece";
+          sq.textContent = GLYPH[piece] || piece;
+        }
+        sq.setAttribute("aria-label", name + (piece !== "." ? " " + piece : " пусто"));
+        board.appendChild(sq);
+      }
+    }
+    var corner = document.createElement("div");
+    corner.className = "coord";
+    board.appendChild(corner);
+    FILES.forEach(function (f) {
+      var c = document.createElement("div");
+      c.className = "coord";
+      c.textContent = f;
+      board.appendChild(c);
+    });
+  }
+
+  function renderQuiz(quiz) {
+    var host = document.getElementById("quiz");
+    host.textContent = "";
+    var qs = (quiz && quiz.questions) || [];
+    if (!qs.length) {
+      var p = document.createElement("p");
+      p.className = "dash";
+      p.textContent = DASH;
+      host.appendChild(p);
+      return;
+    }
+    qs.forEach(function (q, idx) {
+      var wrap = document.createElement("div");
+      wrap.className = "q";
+
+      var t = document.createElement("p");
+      t.className = "qt";
+      t.textContent = (idx + 1) + ". " + (q.text || DASH);
+      wrap.appendChild(t);
+
+      var ol = document.createElement("ol");
+      (q.options || []).forEach(function (opt) {
+        var li = document.createElement("li");
+        li.textContent = opt;
+        ol.appendChild(li);
+      });
+      wrap.appendChild(ol);
+
+      var det = document.createElement("details");
+      var sum = document.createElement("summary");
+      sum.textContent = "Показать ответ";
+      det.appendChild(sum);
+
+      var ans = document.createElement("p");
+      ans.className = "expl";
+      var right = (q.options || [])[q.correct];
+      var strong = document.createElement("b");
+      strong.textContent = right ? ((q.correct + 1) + ". " + right) : DASH;
+      ans.appendChild(strong);
+      det.appendChild(ans);
+
+      var ex = document.createElement("p");
+      ex.className = "expl";
+      ex.textContent = q.explanation || DASH;
+      det.appendChild(ex);
+
+      det.addEventListener("toggle", function () {
+        var items = ol.children;
+        for (var i = 0; i < items.length; i++) {
+          items[i].className = (det.open && i === q.correct) ? "right" : "";
+        }
+      });
+
+      wrap.appendChild(det);
+      host.appendChild(wrap);
+    });
+  }
+
+  function render(pko) {
+    var L = pko.layers || {};
+
+    document.getElementById("title").textContent = (L.play && L.play.config && L.play.config.title) || pko.id || "Объект знания";
+    put("claim", pko.claim);
+    document.title = (pko.id || "PKO") + " — Playable Knowledge Object";
+
+    var meta = document.getElementById("meta");
+    meta.textContent = "";
+    [["игра", pko.game], ["область", pko.domain], ["XKS", pko.xks_version],
+     ["слоёв", Object.keys(L).length + " / 6"]].forEach(function (pair) {
+      meta.appendChild(chip(pair[0] + ": " + (pair[1] || DASH)));
+    });
+
+    // 1 answer
+    put("answer-text", L.answer && L.answer.text);
+    put("answer-lang", L.answer && L.answer.language);
+    put("answer-level", L.answer && L.answer.reading_level);
+
+    // 2 evidence
+    var ev = L.evidence || {};
+    put("ev-quote", ev.quote ? "«" + ev.quote + "»" : "");
+    put("ev-section", ev.section);
+    put("ev-type", ev.type);
+    var refHost = document.getElementById("ev-ref");
+    refHost.textContent = "";
+    if (ev.ref) {
+      var a = document.createElement("a");
+      a.href = ev.ref;
+      a.textContent = ev.ref;
+      a.rel = "noopener noreferrer";
+      a.target = "_blank";
+      refHost.appendChild(a);
+    } else {
+      refHost.textContent = DASH;
+      refHost.className = "dash";
+    }
+
+    // 3 model
+    var m = L.model || {};
+    put("model-desc", m.description);
+    var ul = document.getElementById("model-pre");
+    ul.textContent = "";
+    var pre = (m.formal && m.formal.preconditions) || [];
+    if (!pre.length) {
+      var li0 = document.createElement("li");
+      li0.className = "dash";
+      li0.textContent = DASH;
+      ul.appendChild(li0);
+    } else {
+      pre.forEach(function (p) {
+        var li = document.createElement("li");
+        var c = document.createElement("code");
+        c.textContent = p;
+        li.appendChild(c);
+        ul.appendChild(li);
+      });
+    }
+    put("model-result", m.formal && m.formal.result);
+
+    // 4 play
+    var cfg = (L.play && L.play.config && L.play.config.mechanics) || {};
+    put("play-instruction", cfg.instruction);
+    drawBoard(cfg.fen, cfg.highlight_squares);
+    var legendParts = [];
+    if (cfg.fen) legendParts.push("FEN: " + cfg.fen);
+    if (cfg.highlight_squares && cfg.highlight_squares.length) {
+      legendParts.push("подсвечены: " + cfg.highlight_squares.join(", "));
+    }
+    put("play-legend", legendParts.join(" · "));
+    put("play-solution", cfg.solution);
+    put("play-success", cfg.on_success);
+    put("play-fail", cfg.on_fail);
+
+    // 5 quiz
+    renderQuiz(L.quiz);
+
+    // 6 machine
+    var mc = L.machine || {};
+    put("m-assert", mc.selftest_assertion);
+    put("m-sql", mc.acceptance_sql);
+    put("m-note", mc.coverage_note);
+
+    // подвал
+    put("pko-id", pko.id);
+    put("f-confidence", (pko.confidence === 0 || pko.confidence) ? pko.confidence : "");
+    var prov = (pko.provenance && pko.provenance.claim) || {};
+    put("f-source", prov.source);
+    put("f-stamp", prov.timestamp);
+    var dec = pko.decay || {};
+    put("f-decay", (dec.trigger || dec.check_after)
+      ? ((dec.trigger || DASH) + " · не позже " + (dec.check_after || DASH))
+      : "");
+    put("f-xks", pko.xks_version);
+    put("f-game", pko.game);
+    put("f-domain", pko.domain);
+
+    document.getElementById("loading").hidden = true;
+    document.getElementById("content").hidden = false;
+  }
+
+  function fail(msg) {
+    document.getElementById("loading").hidden = true;
+    var box = document.getElementById("error");
+    box.hidden = false;
+    document.getElementById("error-detail").textContent = msg;
+  }
+
+  document.getElementById("src-path").textContent = SRC;
+
+  fetch(SRC, { cache: "no-store" })
+    .then(function (r) {
+      if (!r.ok) throw new Error(SRC + " → HTTP " + r.status);
+      return r.json();
+    })
+    .then(render)
+    .catch(function (e) { fail(String(e && e.message ? e.message : e)); });
+})();
+</script>
+</body>
+</html>
