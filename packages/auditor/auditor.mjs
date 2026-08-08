@@ -4,7 +4,7 @@
  * Проверяет, что каждый PKO-атом в knowledge/pko/ содержит все
  * обязательные слои: answer, evidence, model, play, quiz, machine.
  *
- * ADOPT из Igorz1993/DaemonTycoon src/js/auditor.js
+ * ADOPT из Igor-Zinin/DaemonTycoon src/js/auditor.js
  * Переработано: убрана Firebase/Telegram зависимость.
  * Добавлено: PKO-schema validation, coverage report.
  *
