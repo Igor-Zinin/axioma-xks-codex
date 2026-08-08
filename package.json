@@ -1,0 +1,25 @@
+{
+  "name": "game-codex",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Playable Knowledge Factory — turns verifiable knowledge into reproducible interactive artifacts",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "selftest": "node selftest.mjs",
+    "validate:pko": "python packages/knowledge-api/validate.py",
+    "dev": "cd apps/web && npm run dev"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "playable-knowledge",
+    "agent-governance",
+    "xks",
+    "game-codex"
+  ],
+  "license": "Apache-2.0"
+}
