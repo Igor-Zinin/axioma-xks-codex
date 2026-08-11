@@ -3,6 +3,7 @@
 [![selftest](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE-CODE)
 [![knowledge: CC BY 4.0](https://img.shields.io/badge/knowledge-CC%20BY%204.0-lightgrey)](LICENSE)
+[![live page](https://img.shields.io/badge/live-igor--zinin.github.io%2Fgame--codex-blue)](https://igor-zinin.github.io/game-codex/docs/)
 
 ---
 
@@ -114,9 +115,7 @@ field, quiz with hidden answers, and the machine criterion. Nothing is retyped i
 the HTML — every value is read from the `.pko.json` at runtime, and an empty field is
 drawn as a dash rather than filled in with a guess.
 
-GitHub Pages is **not enabled yet** — that switch belongs to the repository owner.
-When it is (source: branch `main`, folder `/`), the page will be served at
-`/game-codex/docs/`.
+Live: **https://igor-zinin.github.io/game-codex/docs/**
 
 ---
 
