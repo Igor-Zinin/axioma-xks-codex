@@ -142,6 +142,43 @@ First PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/ch
 
 ---
 
+## Where we stand
+
+A benchmark claim published without naming the neighbors who already measure the
+same territory does not survive review. This is not courtesy — it is how the
+factory's own doctrine ("lean on shoulders, do not cut down") applies to itself:
+we are not competing with the projects below, we are sitting on top of what they
+already built.
+
+| Project | What it measures | How we differ |
+|---|---|---|
+| [LMGame-Bench](https://arxiv.org/abs/2505.15146) ([code](https://github.com/lmgame-org/GamingAgent)) — ICLR 2026 | Perception and planning across six games (Sokoban, Tetris, Candy Crush, 2048, Super Mario Bros, Ace Attorney) via a modular harness; 13 models evaluated. | They run live agents against six real games today; we have one static PKO and zero live runs. Where they are ahead, they are simply ahead. |
+| [BALROG](https://arxiv.org/abs/2411.13543) — ICLR 2025, [balrogai.com](https://balrogai.com) | Agentic LLM/VLM reasoning in long-horizon, procedurally generated environments (NetHack and others), with a live, weekly-updated leaderboard. | They have a running leaderboard and verified submissions; we have no agent execution and no leaderboard at all. |
+| [TextArena](https://arxiv.org/abs/2504.11442), [textarena.ai](https://www.textarena.ai/) | 70+ text games, live play against humans and models, real-time TrueSkill ratings. | They measure live play at scale; our object is a static config, not a playable scene yet. Pure breadth loss on our side. |
+| [Kaggle Game Arena](https://www.kaggle.com/game-arena) | Head-to-head model tournaments (chess now, Go/poker planned), all-play-all format, Google-run infrastructure. | Different genre entirely — a tournament platform, not a knowledge repository. We have no comparable infrastructure and are not building one. |
+| [ChessQA](https://arxiv.org/abs/2510.23948) | LLM chess understanding across five categories: structural rules, motifs, tactics, position judgment, semantics. | Same domain (chess), opposite grain: they cover breadth of chess knowledge with many questions per model; we cover one rule (en passant) to full depth — six representations, one machine-checkable criterion, one proof. |
+| [GVGAI-LLM](https://arxiv.org/abs/2508.08501) | Procedurally-infinite arcade games via ASCII rendering; spatial reasoning and planning across nine LLMs. | They already have a scoring engine; our `play` layer is still a scene config with no renderer (see "What is not here" above). |
+
+**What we actually have, stated plainly:** one PKO object, zero live measurements,
+zero external users. Minesweeper and Connect Four are plan, not inventory — they
+do not exist in this repo yet.
+
+**Our one thesis:** every project above publishes a score as of today. We publish
+a decay curve per claim, with a proof and a death date attached to each one. Our
+unit of measurement is a checkable claim, not a game.
+
+**Why this shelf exists at all — saturation.** A 2026 study of 60 widely-cited
+LLM benchmarks found 29 already highly saturated (Sindex ≥ 0.7), 14 of those very
+highly saturated (≥ 0.9) — [arXiv:2602.16763](https://arxiv.org/abs/2602.16763).
+BIG-Bench Hard is the canonical case: assembled in 2022 specifically from tasks
+that were *hard* for language models at the time
+([arXiv:2210.09261](https://arxiv.org/abs/2210.09261)), and by 2024–2026 frontier
+models clear it above 90%, leaving it useful mostly for mid-tier and open-weight
+comparison. A score frozen on a leaderboard has no way to say when it stopped
+being a good question — a decay-dated claim does.
+
+---
+
 ## Donors (Phase A Forensic Merge Map)
 
 This repo grew out of 4 private repos. The full asset-by-asset classification
