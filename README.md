@@ -57,7 +57,7 @@ One game rule → one PKO → six representations of the same knowledge:
 node selftest.mjs   # verifies structure + all PKOs
 ```
 
-No dependencies, no network, no database, no keys — just Node 18+.
+Zero dependencies, zero database. Network read-only for online evidence verification in C-06 (FIDE quote assertion), no keys — just Node 18+.
 
 ---
 
