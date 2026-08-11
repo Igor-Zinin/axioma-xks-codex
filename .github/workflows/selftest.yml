@@ -59,4 +59,9 @@ jobs:
         run: npm run benchmark:chess
 
       - name: Validate saved chess result
-        run: node -e "const r=require('./docs/data/chess-reference-result-v0.1.json'); if(r.metrics.pass_rate!==1 || r.metrics.consistency!==1 || r.trials!==3) process.exit(1); console.log('GREEN saved baseline: 15/15, 3 trials, consistency 1.0')"
+        run: |
+          node <<'NODE'
+          const r = require('./docs/data/chess-reference-result-v0.1.json');
+          if (r.metrics.pass_rate !== 1 || r.metrics.consistency !== 1 || r.trials !== 3) process.exit(1);
+          console.log('GREEN saved baseline: 15/15, 3 trials, consistency 1.0');
+          NODE
