@@ -230,6 +230,29 @@ footer {
 }
 footer p { margin: 0.35rem 0; }
 
+.provenance-footer {
+  margin-top: 3rem;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--accent);
+  border-radius: 8px;
+  background: var(--bg-soft);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.provenance-footer p { margin: 0.3rem 0; }
+.provenance-footer a { color: var(--accent); text-decoration: none; }
+.provenance-footer a:hover { text-decoration: underline; }
+.prov-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+}
+
 .dash { color: var(--muted); }
 
 @media (max-width: 480px) {
