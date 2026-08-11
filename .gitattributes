@@ -1,0 +1,7 @@
+# Language stats: this repository is a knowledge factory, not a JS library.
+# Mark knowledge/docs/wiki content as documentation so GitHub Linguist excludes
+# it from the "Languages" bar. Syntax per github-linguist docs:
+# https://github.com/github-linguist/linguist/blob/main/docs/overrides.md
+knowledge/** linguist-documentation
+docs/** linguist-documentation
+wiki/** linguist-documentation
