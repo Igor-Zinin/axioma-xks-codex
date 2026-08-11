@@ -3,6 +3,8 @@
   "protocol": "chess-v0.1",
   "model": "reference-baseline",
   "provider": "local",
+  "date": "2026-08-11T00:00:00Z",
+  "evaluator_version": "chess-evaluator@0.1.0",
   "trials": 3,
   "metrics": {
     "pass_rate": 1,
@@ -101,6 +103,77 @@
       "task": "interactive_play-001",
       "family": "interactive_play",
       "status": "pass"
+    }
+  ],
+  "raw_trajectories": [
+    {
+      "responses": {
+        "legality-001": {
+          "move": "e5d6"
+        },
+        "state_tracking-001": {
+          "moves": [
+            "e5d6"
+          ]
+        },
+        "tactics-001": {
+          "move": "e5d6"
+        },
+        "explanation-001": {
+          "text": "The pawn moves to d6 and the capture is legal only on the next move."
+        },
+        "interactive_play-001": {
+          "moves": [
+            "e5d6"
+          ]
+        }
+      }
+    },
+    {
+      "responses": {
+        "legality-001": {
+          "move": "e5d6"
+        },
+        "state_tracking-001": {
+          "moves": [
+            "e5d6"
+          ]
+        },
+        "tactics-001": {
+          "move": "e5d6"
+        },
+        "explanation-001": {
+          "text": "The pawn moves to d6 and the capture is legal only on the next move."
+        },
+        "interactive_play-001": {
+          "moves": [
+            "e5d6"
+          ]
+        }
+      }
+    },
+    {
+      "responses": {
+        "legality-001": {
+          "move": "e5d6"
+        },
+        "state_tracking-001": {
+          "moves": [
+            "e5d6"
+          ]
+        },
+        "tactics-001": {
+          "move": "e5d6"
+        },
+        "explanation-001": {
+          "text": "The pawn moves to d6 and the capture is legal only on the next move."
+        },
+        "interactive_play-001": {
+          "moves": [
+            "e5d6"
+          ]
+        }
+      }
     }
   ],
   "evidence_status": "submitted"

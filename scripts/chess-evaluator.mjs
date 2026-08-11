@@ -22,6 +22,7 @@ if (!inputPath) {
 const protocol = JSON.parse(fs.readFileSync(protocolPath, "utf8"));
 const submission = JSON.parse(fs.readFileSync(path.resolve(inputPath), "utf8"));
 const trials = Array.isArray(submission.trials) ? submission.trials : [];
+const evaluatorVersion = "chess-evaluator@0.1.0";
 const verdicts = [];
 
 function normalize(text) {
@@ -78,9 +79,12 @@ const result = {
   protocol: submission.protocol || protocol.protocol,
   model: submission.model || "unspecified",
   provider: submission.provider || "unspecified",
+  date: submission.date || null,
+  evaluator_version: evaluatorVersion,
   trials: trials.length,
   metrics: { pass_rate: total ? passed / total : 0, consistency, passed, failed, incomplete },
   verdicts,
+  raw_trajectories: trials,
   evidence_status: "submitted"
 };
 console.log(JSON.stringify(result, null, 2));

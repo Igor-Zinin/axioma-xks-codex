@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Game Codex Observatory result",
   "type": "object",
-  "required": ["game", "protocol", "model", "trials", "metrics", "evidence_status"],
+  "required": ["game", "protocol", "model", "provider", "date", "evaluator_version", "trials", "metrics", "raw_trajectories", "evidence_status"],
   "properties": {
     "game": {"type": "string"},
     "protocol": {"type": "string"},
