@@ -169,12 +169,21 @@ pre {
   font-size: 1.5rem;
   line-height: 1;
   position: relative;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 .sq.light { background: #b9c3cd; color: #10151b; }
 .sq.dark  { background: #5d6b7a; color: #10151b; }
 .sq.black-piece { color: #10151b; }
 .sq.white-piece { color: #fbfdff; text-shadow: 0 0 2px #000, 0 0 1px #000; }
 .sq.hl { box-shadow: inset 0 0 0 3px var(--orange); }
+.sq:focus-visible { outline: 3px solid var(--yellow); outline-offset: -3px; }
+.sq.selected { box-shadow: inset 0 0 0 4px var(--yellow); }
+.play-status { min-height: 1.4rem; margin: 0.55rem 0 0; font-weight: 600; }
+.play-status.success { color: var(--green); }
+.play-answer { margin-top: 0.7rem; color: var(--muted); }
+.play-answer summary { cursor: pointer; }
 
 .coord {
   display: flex;

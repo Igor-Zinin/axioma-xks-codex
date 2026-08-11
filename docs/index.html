@@ -54,13 +54,17 @@
 
   <section class="layer" id="layer-play">
     <h2><span class="n">4</span>play · разыгрываемый пример</h2>
-    <p class="sub">Позиция собрана из поля <code>fen</code> этого же объекта. Диаграмма статичная.</p>
+    <p class="sub">Позиция собрана из поля <code>fen</code> этого же объекта. Выбери пешку, затем клетку хода.</p>
     <p id="play-instruction">—</p>
     <div class="board-outer"><div class="board" id="board"></div></div>
+    <p class="play-status" id="play-status" role="status" aria-live="polite">Выбери белую пешку на e5.</p>
     <p class="legend" id="play-legend">—</p>
-    <p class="kv"><b>решение:</b> <span id="play-solution">—</span></p>
-    <p class="kv"><b>верно:</b> <span id="play-success">—</span></p>
-    <p class="kv"><b>неверно:</b> <span id="play-fail">—</span></p>
+    <details class="play-answer">
+      <summary>Показать критерий проверки</summary>
+      <p class="kv"><b>решение:</b> <span id="play-solution">—</span></p>
+      <p class="kv"><b>верно:</b> <span id="play-success">—</span></p>
+      <p class="kv"><b>неверно:</b> <span id="play-fail">—</span></p>
+    </details>
   </section>
 
   <section class="layer" id="layer-quiz">
@@ -122,7 +126,7 @@
   };
   var FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-  function drawBoard(fen, highlight) {
+  function drawBoard(fen, highlight, onSquare) {
     var board = document.getElementById("board");
     board.textContent = "";
     if (!fen) {
@@ -153,8 +157,13 @@
       for (var f = 0; f < 8; f++) {
         var piece = expanded[f] || ".";
         var name = FILES[f] + rankNo;
-        var sq = document.createElement("div");
-        sq.className = "sq " + ((r + f) % 2 === 0 ? "light" : "dark");
+      var sq = onSquare ? document.createElement("button") : document.createElement("div");
+      sq.className = "sq " + ((r + f) % 2 === 0 ? "light" : "dark");
+      if (onSquare) {
+        sq.type = "button";
+        sq.dataset.square = name;
+        sq.addEventListener("click", function () { onSquare(name, sq); });
+      }
         if (hl[name]) sq.className += " hl";
         if (piece !== ".") {
           sq.className += piece === piece.toUpperCase() ? " white-piece" : " black-piece";
@@ -172,6 +181,36 @@
       c.className = "coord";
       c.textContent = f;
       board.appendChild(c);
+    });
+  }
+
+  function wirePlay(fen, solution, successFen, successText, failText, highlights) {
+    var selected = null;
+    var status = document.getElementById("play-status");
+    function say(text) { status.textContent = text; }
+    drawBoard(fen, highlights || [], function (square, button) {
+      if (!selected) {
+        if (square !== String(solution).slice(0, 2)) {
+          say("Сначала выбери белую пешку на e5.");
+          return;
+        }
+        selected = square;
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+        say("Теперь выбери клетку, на которую идёт пешка.");
+        return;
+      }
+      var move = selected + square;
+      if (move === solution) {
+        drawBoard(successFen || fen, [], null);
+        say(successText || "Правильно!");
+        status.classList.add("success");
+        return;
+      }
+      say(failText || "Попробуй ещё раз.");
+      var old = document.querySelector(".sq.selected");
+      if (old) { old.classList.remove("selected"); old.removeAttribute("aria-pressed"); }
+      selected = null;
     });
   }
 
@@ -296,7 +335,7 @@
     // 4 play
     var cfg = (L.play && L.play.config && L.play.config.mechanics) || {};
     put("play-instruction", cfg.instruction);
-    drawBoard(cfg.fen, cfg.highlight_squares);
+    wirePlay(cfg.fen, cfg.solution, cfg.success_fen, cfg.on_success, cfg.on_fail, cfg.highlight_squares);
     var legendParts = [];
     if (cfg.fen) legendParts.push("FEN: " + cfg.fen);
     if (cfg.highlight_squares && cfg.highlight_squares.length) {

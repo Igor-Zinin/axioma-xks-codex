@@ -49,7 +49,7 @@ One game rule → one PKO → six representations of the same knowledge:
 | `answer` | Human-readable explanation |
 | `evidence` | Authoritative reference (FIDE rule, paper, etc.) |
 | `model` | Formal preconditions and logic |
-| `play` | Mini-scene config (`phaser3-scene`) — position, task, solution. Renderer not built yet |
+| `play` | Browser-interactive mini-scene — position, task, move validation, and success state |
 | `quiz` | Questions to test understanding |
 | `machine` | `acceptance_sql` — machine-checkable criterion |
 
@@ -110,7 +110,7 @@ it byte-for-byte with `knowledge/pko/` and goes red on any divergence. Run
 ## The public page
 
 [`docs/index.html`](docs/index.html) renders one PKO in full: claim, evidence with a
-link to the FIDE source, formal model, a static board position built from the `fen`
+link to the FIDE source, formal model, and an interactive board position built from the `fen`
 field, quiz with hidden answers, and the machine criterion. Nothing is retyped into
 the HTML — every value is read from the `.pko.json` at runtime, and an empty field is
 drawn as a dash rather than filled in with a guess.
@@ -121,9 +121,9 @@ Live: **https://igor-zinin.github.io/game-codex/docs/**
 
 ## What is not here
 
-- No game engine and no interactive renderer yet. The `play` layer is currently a
-  scene *config* inside the PKO plus a static diagram on the public page. An engine
-  will be added when there is something that runs, not before.
+- No external game engine is required for the first object. The `play` layer is a
+  browser-native interactive scene: select the white pawn, select a destination,
+  receive feedback, and see the resulting position. A richer engine may be added later.
 - No AI model — evidence must be authoritative (FIDE rules, papers, etc.).
 - No XKS schema validator. The Python one imported in Phase B arrived byte-corrupted
   and was removed rather than left in place as a green-looking file that never parsed.
@@ -152,9 +152,9 @@ already built.
 
 | Project | What it measures | How we differ |
 |---|---|---|
-| [LMGame-Bench](https://arxiv.org/abs/2505.15146) ([code](https://github.com/lmgame-org/GamingAgent)) — ICLR 2026 | Perception and planning across six games (Sokoban, Tetris, Candy Crush, 2048, Super Mario Bros, Ace Attorney) via a modular harness; 13 models evaluated. | They run live agents against six real games today; we have one static PKO and zero live runs. Where they are ahead, they are simply ahead. |
+| [LMGame-Bench](https://arxiv.org/abs/2505.15146) ([code](https://github.com/lmgame-org/GamingAgent)) — ICLR 2026 | Perception and planning across six games (Sokoban, Tetris, Candy Crush, 2048, Super Mario Bros, Ace Attorney) via a modular harness; 13 models evaluated. | They run live agents against six real games today; we have one browser-interactive PKO and zero model runs. Where they are ahead, they are simply ahead. |
 | [BALROG](https://arxiv.org/abs/2411.13543) — ICLR 2025, [balrogai.com](https://balrogai.com) | Agentic LLM/VLM reasoning in long-horizon, procedurally generated environments (NetHack and others), with a live, weekly-updated leaderboard. | They have a running leaderboard and verified submissions; we have no agent execution and no leaderboard at all. |
-| [TextArena](https://arxiv.org/abs/2504.11442), [textarena.ai](https://www.textarena.ai/) | 70+ text games, live play against humans and models, real-time TrueSkill ratings. | They measure live play at scale; our object is a static config, not a playable scene yet. Pure breadth loss on our side. |
+| [TextArena](https://arxiv.org/abs/2504.11442), [textarena.ai](https://www.textarena.ai/) | 70+ text games, live play against humans and models, real-time TrueSkill ratings. | They measure live play at scale; our first object is a small browser scene, not yet a model benchmark. Pure breadth and scale loss on our side. |
 | [Kaggle Game Arena](https://www.kaggle.com/game-arena) | Head-to-head model tournaments (chess now, Go/poker planned), all-play-all format, Google-run infrastructure. | Different genre entirely — a tournament platform, not a knowledge repository. We have no comparable infrastructure and are not building one. |
 | [ChessQA](https://arxiv.org/abs/2510.23948) | LLM chess understanding across five categories: structural rules, motifs, tactics, position judgment, semantics. | Same domain (chess), opposite grain: they cover breadth of chess knowledge with many questions per model; we cover one rule (en passant) to full depth — six representations, one machine-checkable criterion, one proof. |
 | [GVGAI-LLM](https://arxiv.org/abs/2508.08501) | Procedurally-infinite arcade games via ASCII rendering; spatial reasoning and planning across nine LLMs. | They already have a scoring engine; our `play` layer is still a scene config with no renderer (see "What is not here" above). |
