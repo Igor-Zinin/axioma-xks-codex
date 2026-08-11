@@ -89,6 +89,9 @@ if (pko) {
   assert(!!pko.layers?.machine?.acceptance_sql,
     "C-02 · machine layer has acceptance_sql (machine-checkable criterion)");
 
+  assert(!!pko.layers?.machine?.local_check,
+    "C-02 · machine layer has a public local_check");
+
   assert(pko.confidence === 1.0,
     "C-02 · confidence is a number (not absent or string)");
 

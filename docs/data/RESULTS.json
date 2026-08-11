@@ -8,6 +8,11 @@
       "protocol": "chess-v0.1",
       "model": "reference-baseline",
       "evidence_status": "submitted",
+      "trials": 3,
+      "task_fixtures": 12,
+      "passed": 36,
+      "failed": 0,
+      "incomplete": 0,
       "note": "Deterministic control fixture, not a provider-backed model result."
     }
   ]

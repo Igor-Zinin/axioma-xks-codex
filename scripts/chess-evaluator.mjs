@@ -29,29 +29,29 @@ function normalize(text) {
   return String(text || "").toLowerCase().replace(/[’']/g, "'");
 }
 
-function applyEnPassant(fen, move) {
-  if (move !== "e5d6") return null;
+function applyKnownMove(fen, move) {
   const fields = fen.split(" ");
-  if (fields[0] !== "8/8/8/3pP3/8/8/8/8" || fields[1] !== "w" || fields[2] !== "-" || fields[3] !== "d6") return null;
-  fields[0] = "8/8/3P4/8/8/8/8/8";
+  if (fields[0] === "8/8/8/3pP3/8/8/8/8" && fields[1] === "w" && fields[3] === "d6" && move === "e5d6") fields[0] = "8/8/3P4/8/8/8/8/8";
+  else if (fields[0] === "8/8/8/8/3Pp3/8/8/8" && fields[1] === "b" && fields[3] === "d3" && move === "e4d3") fields[0] = "8/8/8/8/8/3p4/8/8";
+  else return null;
   fields[3] = "-";
   return fields.join(" ");
 }
 
 function evaluate(task, response) {
   if (!response) return { status: "incomplete", reason: "missing response" };
-  if (task.family === "legality") return response.move === task.expected.move
+  if (task.family === "legality") return response.move === task.expected.move && response.legal === task.expected.legal
     ? { status: "pass" } : { status: "fail", reason: "move is not the expected legal move" };
   if (task.family === "tactics") return response.move === task.expected.best_move
     ? { status: "pass" } : { status: "fail", reason: "move is not the expected tactical solution" };
   if (task.family === "state_tracking") {
     const moves = response.moves;
-    return Array.isArray(moves) && moves.length === 1 && applyEnPassant(task.start_fen, moves[0]) === task.expected_fen
+    return Array.isArray(moves) && moves.length === 1 && applyKnownMove(task.start_fen, moves[0]) === task.expected_fen
       ? { status: "pass" } : { status: "fail", reason: "state transition does not match expected FEN" };
   }
   if (task.family === "interactive_play") {
     const moves = response.moves;
-    return Array.isArray(moves) && moves.join(",") === task.expected_moves.join(",") && applyEnPassant(task.start_fen, moves[0]) === task.expected_fen
+    return Array.isArray(moves) && moves.join(",") === task.expected_moves.join(",") && applyKnownMove(task.start_fen, moves[0]) === task.expected_fen
       ? { status: "pass" } : { status: "fail", reason: "interactive trajectory is illegal or incomplete" };
   }
   if (task.family === "explanation") {

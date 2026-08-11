@@ -9,98 +9,224 @@
   "metrics": {
     "pass_rate": 1,
     "consistency": 1,
-    "passed": 15,
+    "passed": 36,
     "failed": 0,
     "incomplete": 0
   },
   "verdicts": [
     {
       "trial": 1,
-      "task": "legality-001",
+      "task": "legality-white-ep",
       "family": "legality",
       "status": "pass"
     },
     {
       "trial": 1,
-      "task": "state_tracking-001",
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "state-white-ep",
       "family": "state_tracking",
       "status": "pass"
     },
     {
       "trial": 1,
-      "task": "tactics-001",
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "tactics-white-ep",
       "family": "tactics",
       "status": "pass"
     },
     {
       "trial": 1,
-      "task": "explanation-001",
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "explanation-white-ep",
       "family": "explanation",
       "status": "pass"
     },
     {
       "trial": 1,
-      "task": "interactive_play-001",
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "interactive-black-ep",
       "family": "interactive_play",
       "status": "pass"
     },
     {
       "trial": 2,
-      "task": "legality-001",
+      "task": "legality-white-ep",
       "family": "legality",
       "status": "pass"
     },
     {
       "trial": 2,
-      "task": "state_tracking-001",
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "state-white-ep",
       "family": "state_tracking",
       "status": "pass"
     },
     {
       "trial": 2,
-      "task": "tactics-001",
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "tactics-white-ep",
       "family": "tactics",
       "status": "pass"
     },
     {
       "trial": 2,
-      "task": "explanation-001",
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "explanation-white-ep",
       "family": "explanation",
       "status": "pass"
     },
     {
       "trial": 2,
-      "task": "interactive_play-001",
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "interactive-black-ep",
       "family": "interactive_play",
       "status": "pass"
     },
     {
       "trial": 3,
-      "task": "legality-001",
+      "task": "legality-white-ep",
       "family": "legality",
       "status": "pass"
     },
     {
       "trial": 3,
-      "task": "state_tracking-001",
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "state-white-ep",
       "family": "state_tracking",
       "status": "pass"
     },
     {
       "trial": 3,
-      "task": "tactics-001",
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "tactics-white-ep",
       "family": "tactics",
       "status": "pass"
     },
     {
       "trial": 3,
-      "task": "explanation-001",
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "explanation-white-ep",
       "family": "explanation",
       "status": "pass"
     },
     {
       "trial": 3,
-      "task": "interactive_play-001",
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "interactive-black-ep",
       "family": "interactive_play",
       "status": "pass"
     }
@@ -108,69 +234,156 @@
   "raw_trajectories": [
     {
       "responses": {
-        "legality-001": {
-          "move": "e5d6"
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true
         },
-        "state_tracking-001": {
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false
+        },
+        "state-white-ep": {
           "moves": [
             "e5d6"
           ]
         },
-        "tactics-001": {
+        "state-black-ep": {
+          "moves": [
+            "e4d3"
+          ]
+        },
+        "tactics-white-ep": {
           "move": "e5d6"
         },
-        "explanation-001": {
+        "tactics-black-ep": {
+          "move": "e4d3"
+        },
+        "explanation-white-ep": {
           "text": "The pawn moves to d6 and the capture is legal only on the next move."
         },
-        "interactive_play-001": {
+        "explanation-black-ep": {
+          "text": "The pawn moves to d3 and the capture is legal only on the next move."
+        },
+        "interactive-white-ep": {
           "moves": [
             "e5d6"
+          ]
+        },
+        "interactive-black-ep": {
+          "moves": [
+            "e4d3"
           ]
         }
       }
     },
     {
       "responses": {
-        "legality-001": {
-          "move": "e5d6"
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true
         },
-        "state_tracking-001": {
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false
+        },
+        "state-white-ep": {
           "moves": [
             "e5d6"
           ]
         },
-        "tactics-001": {
+        "state-black-ep": {
+          "moves": [
+            "e4d3"
+          ]
+        },
+        "tactics-white-ep": {
           "move": "e5d6"
         },
-        "explanation-001": {
+        "tactics-black-ep": {
+          "move": "e4d3"
+        },
+        "explanation-white-ep": {
           "text": "The pawn moves to d6 and the capture is legal only on the next move."
         },
-        "interactive_play-001": {
+        "explanation-black-ep": {
+          "text": "The pawn moves to d3 and the capture is legal only on the next move."
+        },
+        "interactive-white-ep": {
           "moves": [
             "e5d6"
+          ]
+        },
+        "interactive-black-ep": {
+          "moves": [
+            "e4d3"
           ]
         }
       }
     },
     {
       "responses": {
-        "legality-001": {
-          "move": "e5d6"
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true
         },
-        "state_tracking-001": {
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false
+        },
+        "state-white-ep": {
           "moves": [
             "e5d6"
           ]
         },
-        "tactics-001": {
+        "state-black-ep": {
+          "moves": [
+            "e4d3"
+          ]
+        },
+        "tactics-white-ep": {
           "move": "e5d6"
         },
-        "explanation-001": {
+        "tactics-black-ep": {
+          "move": "e4d3"
+        },
+        "explanation-white-ep": {
           "text": "The pawn moves to d6 and the capture is legal only on the next move."
         },
-        "interactive_play-001": {
+        "explanation-black-ep": {
+          "text": "The pawn moves to d3 and the capture is legal only on the next move."
+        },
+        "interactive-white-ep": {
           "moves": [
             "e5d6"
+          ]
+        },
+        "interactive-black-ep": {
+          "moves": [
+            "e4d3"
           ]
         }
       }

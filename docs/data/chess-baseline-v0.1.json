@@ -1,13 +1,8 @@
 {
-  "game": "chess",
-  "protocol": "chess-v0.1",
-  "version": "0.1.0",
-  "model": "reference-baseline",
-  "provider": "local",
-  "date": "2026-08-11T00:00:00Z",
-  "trials": [
-    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}},
-    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}},
-    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}}
+  "game":"chess","protocol":"chess-v0.1","version":"0.1.0","model":"reference-baseline","provider":"local","date":"2026-08-11T00:00:00Z",
+  "trials":[
+    {"responses":{"legality-white-ep":{"move":"e5d6","legal":true},"legality-black-ep":{"move":"e4d3","legal":true},"legality-white-illegal-forward":{"move":"e5e6","legal":false},"legality-black-illegal-forward":{"move":"e4e3","legal":false},"state-white-ep":{"moves":["e5d6"]},"state-black-ep":{"moves":["e4d3"]},"tactics-white-ep":{"move":"e5d6"},"tactics-black-ep":{"move":"e4d3"},"explanation-white-ep":{"text":"The pawn moves to d6 and the capture is legal only on the next move."},"explanation-black-ep":{"text":"The pawn moves to d3 and the capture is legal only on the next move."},"interactive-white-ep":{"moves":["e5d6"]},"interactive-black-ep":{"moves":["e4d3"]}}},
+    {"responses":{"legality-white-ep":{"move":"e5d6","legal":true},"legality-black-ep":{"move":"e4d3","legal":true},"legality-white-illegal-forward":{"move":"e5e6","legal":false},"legality-black-illegal-forward":{"move":"e4e3","legal":false},"state-white-ep":{"moves":["e5d6"]},"state-black-ep":{"moves":["e4d3"]},"tactics-white-ep":{"move":"e5d6"},"tactics-black-ep":{"move":"e4d3"},"explanation-white-ep":{"text":"The pawn moves to d6 and the capture is legal only on the next move."},"explanation-black-ep":{"text":"The pawn moves to d3 and the capture is legal only on the next move."},"interactive-white-ep":{"moves":["e5d6"]},"interactive-black-ep":{"moves":["e4d3"]}}},
+    {"responses":{"legality-white-ep":{"move":"e5d6","legal":true},"legality-black-ep":{"move":"e4d3","legal":true},"legality-white-illegal-forward":{"move":"e5e6","legal":false},"legality-black-illegal-forward":{"move":"e4e3","legal":false},"state-white-ep":{"moves":["e5d6"]},"state-black-ep":{"moves":["e4d3"]},"tactics-white-ep":{"move":"e5d6"},"tactics-black-ep":{"move":"e4d3"},"explanation-white-ep":{"text":"The pawn moves to d6 and the capture is legal only on the next move."},"explanation-black-ep":{"text":"The pawn moves to d3 and the capture is legal only on the next move."},"interactive-white-ep":{"moves":["e5d6"]},"interactive-black-ep":{"moves":["e4d3"]}}}
   ]
 }

@@ -59,7 +59,10 @@ npm run test:benchmark   # evaluator accepts a baseline and rejects an illegal m
 npm run benchmark:chess  # deterministic Chess v0.1 reference run
 ```
 
-Zero dependencies, zero database. Network read-only for online evidence verification in C-06 (FIDE quote assertion), no keys — just Node 18+.
+Zero runtime dependencies and no database is required for the public check. Network
+is read-only for online evidence verification in C-06 (FIDE quote assertion), no
+keys — just Node 18+. The optional `acceptance_sql` field records an external
+observatory log; the public `local_check` is the reproducible source of truth.
 
 ---
 
@@ -164,11 +167,12 @@ already built.
 | [TextArena](https://arxiv.org/abs/2504.11442), [textarena.ai](https://www.textarena.ai/) | 70+ text games, live play against humans and models, real-time TrueSkill ratings. | They measure live play at scale; our first object is a small browser scene, not yet a model benchmark. Pure breadth and scale loss on our side. |
 | [Kaggle Game Arena](https://www.kaggle.com/game-arena) | Head-to-head model tournaments (chess now, Go/poker planned), all-play-all format, Google-run infrastructure. | Different genre entirely — a tournament platform, not a knowledge repository. We have no comparable infrastructure and are not building one. |
 | [ChessQA](https://arxiv.org/abs/2510.23948) | LLM chess understanding across five categories: structural rules, motifs, tactics, position judgment, semantics. | Same domain (chess), opposite grain: they cover breadth of chess knowledge with many questions per model; we cover one rule (en passant) to full depth — six representations, one machine-checkable criterion, one proof. |
-| [GVGAI-LLM](https://arxiv.org/abs/2508.08501) | Procedurally-infinite arcade games via ASCII rendering; spatial reasoning and planning across nine LLMs. | They already have a scoring engine; our `play` layer is still a scene config with no renderer (see "What is not here" above). |
+| [GVGAI-LLM](https://arxiv.org/abs/2508.08501) | Procedurally-infinite arcade games via ASCII rendering; spatial reasoning and planning across nine LLMs. | They have a full game-environment scoring engine; our first `play` layer is a focused browser scene, not yet a general game engine. |
 
-**What we actually have, stated plainly:** one PKO object, zero live measurements,
-zero external users. Minesweeper and Connect Four are plan, not inventory — they
-do not exist in this repo yet.
+**What we actually have, stated plainly:** one public interactive PKO, a
+deterministic Chess v0.1 reference result, and zero provider-backed model runs.
+Minesweeper and Connect Four are plan, not inventory — they do not exist in this
+repo yet.
 
 **Our one thesis:** every project above publishes a score as of today. We publish
 a decay curve per claim, with a proof and a death date attached to each one. Our

@@ -4,6 +4,9 @@ This is the first protocol of the Game Codex Observatory. It measures a model or
 
 ## Task families
 
+Chess v0.1 currently contains 12 fixtures across five task families, with white/black
+symmetry and deliberately illegal controls. The fixture count is part of the protocol.
+
 | ID | Task | Deterministic verdict |
 |---|---|---|
 | `legality` | choose a move from a position | legal / illegal / unparsable |
@@ -24,7 +27,9 @@ The deterministic evaluator is runnable without credentials:
 npm run benchmark:chess
 ```
 
-The checked-in reference baseline is a protocol fixture, not a model result. It proves that the evaluator and result shape work before any provider is measured.
+The checked-in reference baseline is a protocol fixture, not a model result:
+3 independent trials × 12 fixtures = 36 deterministic verdicts. It proves that
+the evaluator and result shape work before any provider is measured.
 
 ## Metrics
 

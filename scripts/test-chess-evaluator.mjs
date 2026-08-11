@@ -12,7 +12,7 @@ const evaluator = path.join(root, "scripts", "chess-evaluator.mjs");
 const baseline = path.join(root, "docs", "data", "chess-baseline-v0.1.json");
 const temp = path.join(os.tmpdir(), `game-codex-chess-negative-${process.pid}.json`);
 const bad = JSON.parse(fs.readFileSync(baseline, "utf8"));
-bad.trials[0].responses["legality-001"].move = "e5e6";
+bad.trials[0].responses["legality-white-ep"].move = "e5e6";
 fs.writeFileSync(temp, JSON.stringify(bad));
 try {
   const good = spawnSync(process.execPath, [evaluator, "--input", baseline], { encoding: "utf8" });

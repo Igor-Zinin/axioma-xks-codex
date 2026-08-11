@@ -17,6 +17,12 @@
   <div class="meta" id="meta"></div>
 </header>
 
+<aside class="observatory-callout">
+  <strong>Game Codex Observatory</strong>
+  <span>Открытая обсерватория: проверяем, какие способности ИИ сохраняются в формальных играх.</span>
+  <a href="https://github.com/Igor-Zinin/game-codex/blob/main/docs/OBSERVATORY.md">Методология и результаты →</a>
+</aside>
+
 <div class="state" id="loading">Загружаю объект из <code id="src-path">data/chess-en-passant-001.pko.json</code>…</div>
 
 <div class="state error" id="error" hidden>
@@ -77,6 +83,7 @@
     <h2><span class="n">6</span>machine · машинный критерий</h2>
     <p class="sub">Утверждение, у которого есть исполняемая проверка. Здесь она видна целиком.</p>
     <p class="kv"><b>утверждение selftest:</b> <span id="m-assert">—</span></p>
+    <p class="kv"><b>публичная проверка:</b> <code id="m-local">—</code></p>
     <pre id="m-sql">—</pre>
     <p class="kv" id="m-note-row"><b>оговорка:</b> <span id="m-note">—</span></p>
   </section>
@@ -352,6 +359,7 @@
     // 6 machine
     var mc = L.machine || {};
     put("m-assert", mc.selftest_assertion);
+    put("m-local", mc.local_check);
     put("m-sql", mc.acceptance_sql);
     put("m-note", mc.coverage_note);
 

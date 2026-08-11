@@ -33,7 +33,7 @@ The primary output is a capability profile and its change over time, not one com
 ## First recorded result
 
 The [Chess v0.1 reference baseline](data/chess-reference-result-v0.1.json) is a
-deterministic control run: 3 trials × 5 tasks, 15/15 passed. It is not a model
+deterministic control run: 3 trials × 12 fixtures, 36/36 verdicts passed. It is not a model
 claim. Its purpose is to prove that the protocol, evaluator, and result schema
 agree before provider-backed model submissions are accepted.
 

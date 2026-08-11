@@ -3,10 +3,17 @@
   "protocol": "chess-v0.1",
   "version": "0.1.0",
   "tasks": [
-    {"id": "legality-001", "family": "legality", "fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected": {"move": "e5d6", "legal": true}},
-    {"id": "state_tracking-001", "family": "state_tracking", "start_fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "moves": ["e5d6"], "expected_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1"},
-    {"id": "tactics-001", "family": "tactics", "fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected": {"best_move": "e5d6"}},
-    {"id": "explanation-001", "family": "explanation", "required_concepts": ["d6", "next"], "forbidden_concepts": ["any time"]},
-    {"id": "interactive_play-001", "family": "interactive_play", "start_fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected_moves": ["e5d6"], "expected_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1"}
+    {"id":"legality-white-ep","family":"legality","fen":"8/8/8/3pP3/8/8/8/8 w - d6 0 1","expected":{"move":"e5d6","legal":true}},
+    {"id":"legality-black-ep","family":"legality","fen":"8/8/8/8/3Pp3/8/8/8 b - d3 0 1","expected":{"move":"e4d3","legal":true}},
+    {"id":"legality-white-illegal-forward","family":"legality","fen":"8/8/8/3pP3/8/8/8/8 w - d6 0 1","expected":{"move":"e5e6","legal":false}},
+    {"id":"legality-black-illegal-forward","family":"legality","fen":"8/8/8/8/3Pp3/8/8/8 b - d3 0 1","expected":{"move":"e4e3","legal":false}},
+    {"id":"state-white-ep","family":"state_tracking","start_fen":"8/8/8/3pP3/8/8/8/8 w - d6 0 1","moves":["e5d6"],"expected_fen":"8/8/3P4/8/8/8/8/8 w - - 0 1"},
+    {"id":"state-black-ep","family":"state_tracking","start_fen":"8/8/8/8/3Pp3/8/8/8 b - d3 0 1","moves":["e4d3"],"expected_fen":"8/8/8/8/8/3p4/8/8 b - - 0 1"},
+    {"id":"tactics-white-ep","family":"tactics","fen":"8/8/8/3pP3/8/8/8/8 w - d6 0 1","expected":{"best_move":"e5d6"}},
+    {"id":"tactics-black-ep","family":"tactics","fen":"8/8/8/8/3Pp3/8/8/8 b - d3 0 1","expected":{"best_move":"e4d3"}},
+    {"id":"explanation-white-ep","family":"explanation","required_concepts":["d6","next"],"forbidden_concepts":["any time"]},
+    {"id":"explanation-black-ep","family":"explanation","required_concepts":["d3","next"],"forbidden_concepts":["any time"]},
+    {"id":"interactive-white-ep","family":"interactive_play","start_fen":"8/8/8/3pP3/8/8/8/8 w - d6 0 1","expected_moves":["e5d6"],"expected_fen":"8/8/3P4/8/8/8/8/8 w - - 0 1"},
+    {"id":"interactive-black-ep","family":"interactive_play","start_fen":"8/8/8/8/3Pp3/8/8/8 b - d3 0 1","expected_moves":["e4d3"],"expected_fen":"8/8/8/8/8/3p4/8/8 b - - 0 1"}
   ]
 }
