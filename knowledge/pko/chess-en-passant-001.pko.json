@@ -7,7 +7,7 @@
   "confidence": 1.0,
   "provenance": {
     "claim": {
-      "source": "FIDE Laws of Chess 2023, Article 3.7(d)",
+      "source": "FIDE Laws of Chess, действующий свод (в силе с 1 января 2023), Article 3.7.3.1–3.7.3.2",
       "timestamp": "2026-08-08"
     }
   },
@@ -23,9 +23,9 @@
     },
 
     "evidence": {
-      "ref": "https://www.fide.com/FIDE/handbook/LawsOfChess.pdf",
-      "section": "Article 3.7(d)",
-      "quote": "A pawn occupying a square on the same rank as and on an adjacent file to an opponent's pawn which has just advanced two squares in one move from its original square may capture this opponent's pawn as though the latter had been moved only one square.",
+      "ref": "https://handbook.fide.com/chapter/e012023",
+      "section": "Article 3.7.3.1–3.7.3.2",
+      "quote": "A pawn occupying a square on the same rank as and on an adjacent file to an opponent's pawn which has just advanced two squares in one move from its original square may capture this opponent's pawn as though the latter had been moved only one square. This capture is only legal on the move following this advance and is called an 'en passant' capture.",
       "type": "authoritative-rule"
     },
 
