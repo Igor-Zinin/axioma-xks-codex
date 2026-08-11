@@ -162,7 +162,7 @@
       if (onSquare) {
         sq.type = "button";
         sq.dataset.square = name;
-        sq.addEventListener("click", function () { onSquare(name, sq); });
+        sq.addEventListener("click", function () { onSquare(this.dataset.square, this); });
       }
         if (hl[name]) sq.className += " hl";
         if (piece !== ".") {

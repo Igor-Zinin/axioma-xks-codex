@@ -198,6 +198,8 @@ if (existsSync(PAGE_PATH)) {
     "C-05 · play layer exposes an accessible live status");
   assert(page.includes('addEventListener("click"'),
     "C-05 · play layer handles square clicks");
+  assert(page.includes("this.dataset.square"),
+    "C-05 · play click reads the clicked square, not a loop variable");
   assert(page.includes("success_fen"),
     "C-05 · play layer updates the position after a correct move");
   assert(page.includes('fetch(SRC'),
