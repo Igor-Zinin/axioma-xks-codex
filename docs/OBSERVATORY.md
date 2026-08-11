@@ -40,3 +40,7 @@ agree before provider-backed model submissions are accepted.
 The public `chess-benchmark` GitHub Actions workflow reruns the evaluator,
 baseline, and saved-result invariants on every push and pull request with
 read-only repository permissions.
+
+External researchers can follow the [submission guide](SUBMIT.md). The
+machine-readable [results registry](data/RESULTS.json) is append-only: a new
+model, protocol, or reproduction gets a new entry rather than rewriting history.

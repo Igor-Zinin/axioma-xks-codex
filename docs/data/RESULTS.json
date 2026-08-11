@@ -1,0 +1,14 @@
+{
+  "schema": "../RESULT-SCHEMA.json",
+  "results": [
+    {
+      "id": "chess-reference-v0.1-2026-08-11",
+      "path": "chess-reference-result-v0.1.json",
+      "game": "chess",
+      "protocol": "chess-v0.1",
+      "model": "reference-baseline",
+      "evidence_status": "submitted",
+      "note": "Deterministic control fixture, not a provider-backed model result."
+    }
+  ]
+}
