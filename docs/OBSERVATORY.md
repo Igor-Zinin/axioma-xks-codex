@@ -36,3 +36,7 @@ The [Chess v0.1 reference baseline](data/chess-reference-result-v0.1.json) is a
 deterministic control run: 3 trials × 5 tasks, 15/15 passed. It is not a model
 claim. Its purpose is to prove that the protocol, evaluator, and result schema
 agree before provider-backed model submissions are accepted.
+
+The public `chess-benchmark` GitHub Actions workflow reruns the evaluator,
+baseline, and saved-result invariants on every push and pull request with
+read-only repository permissions.

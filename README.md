@@ -55,6 +55,8 @@ One game rule → one PKO → six representations of the same knowledge:
 
 ```bash
 node selftest.mjs   # verifies structure + all PKOs
+npm run test:benchmark   # evaluator accepts a baseline and rejects an illegal move
+npm run benchmark:chess  # deterministic Chess v0.1 reference run
 ```
 
 Zero dependencies, zero database. Network read-only for online evidence verification in C-06 (FIDE quote assertion), no keys — just Node 18+.
