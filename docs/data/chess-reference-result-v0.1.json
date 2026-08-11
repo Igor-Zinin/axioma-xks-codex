@@ -1,0 +1,107 @@
+{
+  "game": "chess",
+  "protocol": "chess-v0.1",
+  "model": "reference-baseline",
+  "provider": "local",
+  "trials": 3,
+  "metrics": {
+    "pass_rate": 1,
+    "consistency": 1,
+    "passed": 15,
+    "failed": 0,
+    "incomplete": 0
+  },
+  "verdicts": [
+    {
+      "trial": 1,
+      "task": "legality-001",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "state_tracking-001",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "tactics-001",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "explanation-001",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "interactive_play-001",
+      "family": "interactive_play",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-001",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "state_tracking-001",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "tactics-001",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "explanation-001",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "interactive_play-001",
+      "family": "interactive_play",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-001",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "state_tracking-001",
+      "family": "state_tracking",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "tactics-001",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "explanation-001",
+      "family": "explanation",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "interactive_play-001",
+      "family": "interactive_play",
+      "status": "pass"
+    }
+  ],
+  "evidence_status": "submitted"
+}

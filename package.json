@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "selftest": "node selftest.mjs",
-    "sync:docs": "node scripts/sync-docs.mjs"
+    "sync:docs": "node scripts/sync-docs.mjs",
+    "benchmark:chess": "node scripts/chess-evaluator.mjs --input docs/data/chess-baseline-v0.1.json --output docs/data/chess-reference-result-v0.1.json"
   },
   "engines": {
     "node": ">=18"

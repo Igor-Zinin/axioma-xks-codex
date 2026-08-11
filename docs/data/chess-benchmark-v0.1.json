@@ -1,0 +1,12 @@
+{
+  "game": "chess",
+  "protocol": "chess-v0.1",
+  "version": "0.1.0",
+  "tasks": [
+    {"id": "legality-001", "family": "legality", "fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected": {"move": "e5d6", "legal": true}},
+    {"id": "state_tracking-001", "family": "state_tracking", "start_fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "moves": ["e5d6"], "expected_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1"},
+    {"id": "tactics-001", "family": "tactics", "fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected": {"best_move": "e5d6"}},
+    {"id": "explanation-001", "family": "explanation", "required_concepts": ["d6", "next"], "forbidden_concepts": ["any time"]},
+    {"id": "interactive_play-001", "family": "interactive_play", "start_fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1", "expected_moves": ["e5d6"], "expected_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1"}
+  ]
+}

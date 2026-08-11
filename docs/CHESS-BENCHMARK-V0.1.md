@@ -18,6 +18,14 @@ Every task is run at least three times with the same protocol and independent se
 
 The submission records the model snapshot, provider, prompt, tools, protocol version, date, seed or sampling configuration, trial count, evaluator version, cost, latency, raw trajectory, and deterministic verdict.
 
+The deterministic evaluator is runnable without credentials:
+
+```bash
+npm run benchmark:chess
+```
+
+The checked-in reference baseline is a protocol fixture, not a model result. It proves that the evaluator and result shape work before any provider is measured.
+
 ## Metrics
 
 The primary profile contains legal-action rate, exact state-tracking rate, goal success, consistency across trials, cost, latency, confidence calibration, and explanation grounding. A composite score is intentionally not the primary result: a model that wins while making illegal moves must remain visibly different from a reliable model.

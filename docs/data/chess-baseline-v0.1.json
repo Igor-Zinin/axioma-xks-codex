@@ -1,0 +1,12 @@
+{
+  "game": "chess",
+  "protocol": "chess-v0.1",
+  "version": "0.1.0",
+  "model": "reference-baseline",
+  "provider": "local",
+  "trials": [
+    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}},
+    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}},
+    {"responses": {"legality-001": {"move": "e5d6"}, "state_tracking-001": {"moves": ["e5d6"]}, "tactics-001": {"move": "e5d6"}, "explanation-001": {"text": "The pawn moves to d6 and the capture is legal only on the next move."}, "interactive_play-001": {"moves": ["e5d6"]}}}
+  ]
+}
