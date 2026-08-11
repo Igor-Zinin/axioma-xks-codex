@@ -22,15 +22,22 @@
       "reading_level": "intermediate"
     },
     "evidence": {
-      "ref": "https://github.com/Igor-Zinin/game-codex/blob/main/wiki/PKO-Specification-Standard.md",
-      "section": "Standard 6-Layer Architecture",
-      "quote": "A valid Playable Knowledge Object (PKO) atom MUST contain 6 mandatory layers: answer, evidence, model, play, quiz, machine.",
+      "ref": "https://raw.githubusercontent.com/wiki/Igor-Zinin/game-codex/PKO-Specification-Standard.md",
+      "section": "The 6 Mandatory Layers",
+      "quote": "A **Playable Knowledge Object (PKO)** is a 6-layer machine-verifiable executable knowledge capsule.",
       "type": "specification"
     },
     "model": {
       "description": "Входные предусловия для создания атома: наличие первоисточника (ref + quote) и детерминированного критерия приёмки (acceptance_sql).",
-      "inputs": ["claim_text", "evidence_url", "evidence_quote", "acceptance_query"],
-      "outputs": ["playable_knowledge_object_json"]
+      "inputs": [
+        "claim_text",
+        "evidence_url",
+        "evidence_quote",
+        "acceptance_query"
+      ],
+      "outputs": [
+        "playable_knowledge_object_json"
+      ]
     },
     "play": {
       "interactive_type": "schema-viewer",

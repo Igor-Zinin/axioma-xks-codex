@@ -40,3 +40,8 @@ desktop.ini
 .DS_Store
 .idea/
 .vscode/
+
+# Локальное зеркало вики. Вики GitHub — отдельный репозиторий (game-codex.wiki.git),
+# а не папка в main. Файлы здесь никуда не публикуются и вводят в заблуждение:
+# ссылка на blob/main/wiki/... даёт 404. Правильный адрес — raw.githubusercontent.com/wiki/...
+wiki/

@@ -6,7 +6,7 @@
  * Run: node selftest.mjs
  */
 
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, readdirSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { runAudit } from "./packages/auditor/auditor.mjs";
@@ -107,40 +107,56 @@ if (pko) {
 // возврата (см. низ файла). SKIPPED — это не RED: RED зарезервирован для
 // случая, когда сеть доступна и реально показала, что evidence сломан
 // (плохой HTTP-статус или цитата не найдена в теле ответа).
-if (pko?.layers?.evidence?.ref) {
-  const ref = pko.layers.evidence.ref;
-  const quote = pko.layers.evidence.quote;
+// ПРОВЕРЯЮТСЯ ВСЕ ОБЪЕКТЫ, А НЕ ПЕРВЫЙ. Поймано 2026-08-12: C-06 смотрел один
+// PKO, в репозиторий добавили второй (concept-ccp-001) со ссылкой на файл, которого
+// на GitHub нет — вики живёт отдельным репозиторием, а не веткой main. Прогон
+// остался зелёным: 30 проверок, 0 пропущенных, при битой ссылке в публичном объекте.
+// Сторож, покрывающий не всё, молчит именно там, где должен кричать — тот же класс,
+// что и §8 «проверяй соседей, а не только цель правки».
+const pkoDir = join(__dirname, "knowledge/pko");
+const pkoFiles = readdirSync(pkoDir).filter((f) => f.endsWith(".json"));
+assert(pkoFiles.length > 0, "C-06 · at least one PKO exists to be checked");
+
+for (const file of pkoFiles) {
+  const obj = JSON.parse(readFileSync(join(pkoDir, file), "utf8"));
+  const id = obj.id || file;
+  const ref = obj?.layers?.evidence?.ref;
+  const quote = obj?.layers?.evidence?.quote;
+
+  if (!ref) {
+    assert(false, `C-06 · [${id}] evidence.ref exists so reachability can be checked`);
+    continue;
+  }
 
   if (process.env.SKIP_NETWORK === "1") {
-    skip(`C-06 · evidence.ref reachability (${ref})`,
+    skip(`C-06 · [${id}] evidence.ref reachability (${ref})`,
       "SKIP_NETWORK=1 — сетевая проверка явно пропущена, не подтверждена");
-  } else {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
-      const res = await fetch(ref, { signal: controller.signal });
-      clearTimeout(timeout);
-
-      assert(res.ok,
-        `C-06 · evidence.ref resolves with HTTP 2xx (got ${res.status}) — ${ref}`);
-
-      if (res.ok && quote) {
-        const body = await res.text();
-        const found = normalizeForSearch(body).includes(normalizeForSearch(quote));
-        assert(found,
-          `C-06 · evidence.quote is found verbatim (whitespace-normalized) in the fetched source`);
-      } else if (!quote) {
-        assert(false, "C-06 · evidence.quote is present so it can be checked against the source");
-      }
-    } catch (e) {
-      // Сеть недоступна (DNS/timeout/abort/fetch failed) — не значит, что
-      // evidence сломан. Это "не проверено", а не провал проверки.
-      skip(`C-06 · evidence.ref reachability (${ref})`,
-        `сеть недоступна: ${e.message}`);
-    }
+    continue;
   }
-} else {
-  assert(false, "C-06 · evidence.ref exists so reachability can be checked");
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch(ref, { signal: controller.signal });
+    clearTimeout(timeout);
+
+    assert(res.ok,
+      `C-06 · [${id}] evidence.ref resolves with HTTP 2xx (got ${res.status}) — ${ref}`);
+
+    if (res.ok && quote) {
+      const body = await res.text();
+      const found = normalizeForSearch(body).includes(normalizeForSearch(quote));
+      assert(found,
+        `C-06 · [${id}] evidence.quote is found verbatim (whitespace-normalized) in the fetched source`);
+    } else if (!quote) {
+      assert(false, `C-06 · [${id}] evidence.quote is present so it can be checked against the source`);
+    }
+  } catch (e) {
+    // Сеть недоступна (DNS/timeout/abort/fetch failed) — не значит, что
+    // evidence сломан. Это "не проверено", а не провал проверки.
+    skip(`C-06 · [${id}] evidence.ref reachability (${ref})`,
+      `сеть недоступна: ${e.message}`);
+  }
 }
 
 // ── C-03: PKO auditor detects broken PKOs ────────────────────────────────────
