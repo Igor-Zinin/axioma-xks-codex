@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Game Codex Observatory result",
+  "type": "object",
+  "required": ["game", "protocol", "model", "trials", "metrics", "evidence_status"],
+  "properties": {
+    "game": {"type": "string"},
+    "protocol": {"type": "string"},
+    "model": {"type": "string"},
+    "provider": {"type": "string"},
+    "date": {"type": "string", "format": "date-time"},
+    "prompt_hash": {"type": "string"},
+    "evaluator_version": {"type": "string"},
+    "trials": {"type": "integer", "minimum": 1},
+    "metrics": {"type": "object"},
+    "raw_trajectories": {"type": "array"},
+    "evidence_status": {"enum": ["submitted", "reproduced", "verified"]}
+  }
+}

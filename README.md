@@ -140,6 +140,11 @@ First PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/ch
 **Status:** All 6 layers complete. selftest GREEN.
 **Readable form:** [`docs/index.html`](docs/index.html) — the same object for a human, rendered from the same JSON.
 
+The next public layer is the [Game Codex Observatory](docs/OBSERVATORY.md):
+[Chess Benchmark v0.1](docs/CHESS-BENCHMARK-V0.1.md) defines the first capability
+profile, and [governance](docs/OBSERVATORY-GOVERNANCE.md) defines how results move
+from submitted to reproduced to verified.
+
 ---
 
 ## Where we stand
