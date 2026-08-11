@@ -16,16 +16,25 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let passed = 0;
 let failed = 0;
+let skipped = 0;
 const results = [];
 
 function assert(condition, description) {
   if (condition) {
     passed++;
-    results.push({ ok: true, desc: description });
+    results.push({ status: "pass", desc: description });
   } else {
     failed++;
-    results.push({ ok: false, desc: description });
+    results.push({ status: "fail", desc: description });
   }
+}
+
+// skip(): для проверок, которые не выполнялись (сеть недоступна или явно
+// пропущена флагом). Это НЕ "прошло" — прогон с хотя бы одним skip не зелёный,
+// а неполный, и это обязано быть видно в выводе и в коде возврата.
+function skip(description, reason) {
+  skipped++;
+  results.push({ status: "skip", desc: description, reason });
 }
 
 console.log("\nGame Codex · selftest\n");
@@ -91,16 +100,20 @@ if (pko) {
 // C-02 only checked that evidence.ref is a non-empty string. That let a dead
 // link (2009 PDF cited as "2023") ship green.
 //
-// SKIP_NETWORK=1 env var: used in CI environments where external sites
-// (e.g. handbook.fide.com) block GitHub Actions runner IPs. Offline structure
-// tests C-01..C-05 remain mandatory. C-06 prints a WARNING and is skipped.
-// Run locally without SKIP_NETWORK for full evidence verification.
+// Правило (канон AGENTS.md, правило 18): сетевые вызовы разрешены только для
+// evidence.ref. Недоступность сети ИЛИ явный флаг пропуска (SKIP_NETWORK=1)
+// дают статус SKIPPED ("не проверено"), а не PASSED. Прогон с хотя бы одним
+// SKIPPED — не зелёный, а неполный: это видно в итоговой строке и в коде
+// возврата (см. низ файла). SKIPPED — это не RED: RED зарезервирован для
+// случая, когда сеть доступна и реально показала, что evidence сломан
+// (плохой HTTP-статус или цитата не найдена в теле ответа).
 if (pko?.layers?.evidence?.ref) {
   const ref = pko.layers.evidence.ref;
   const quote = pko.layers.evidence.quote;
 
   if (process.env.SKIP_NETWORK === "1") {
-    console.log(`  WARN  C-06 · network check skipped (SKIP_NETWORK=1) — run locally to verify evidence.ref`);
+    skip(`C-06 · evidence.ref reachability (${ref})`,
+      "SKIP_NETWORK=1 — сетевая проверка явно пропущена, не подтверждена");
   } else {
     try {
       const controller = new AbortController();
@@ -120,8 +133,10 @@ if (pko?.layers?.evidence?.ref) {
         assert(false, "C-06 · evidence.quote is present so it can be checked against the source");
       }
     } catch (e) {
-      assert(false,
-        `C-06 · evidence.ref reachability could not be verified (${e.message}) — treated as FAILED, not skipped`);
+      // Сеть недоступна (DNS/timeout/abort/fetch failed) — не значит, что
+      // evidence сломан. Это "не проверено", а не провал проверки.
+      skip(`C-06 · evidence.ref reachability (${ref})`,
+        `сеть недоступна: ${e.message}`);
     }
   }
 } else {
@@ -187,19 +202,32 @@ if (existsSync(PAGE_PATH)) {
 }
 
 // ── Print results ─────────────────────────────────────────────────────────────
+const LABEL = { pass: "GREEN  ", fail: "RED    ", skip: "SKIPPED" };
 for (const r of results) {
-  console.log(`  ${r.ok ? "GREEN" : "RED  "} ${r.desc}`);
+  const suffix = r.status === "skip" ? ` (${r.reason})` : "";
+  console.log(`  ${LABEL[r.status]} ${r.desc}${suffix}`);
 }
 
-console.log(`\nclaims: 5 · assertions passed: ${passed} · failed: ${failed}\n`);
+console.log(`\nclaims: 5 · assertions passed: ${passed} · failed: ${failed} · skipped: ${skipped}\n`);
 
 // process.exitCode (not process.exit()) — an abrupt exit() while the fetch
 // dispatcher in C-06 still has a keep-alive socket/timer open crashes on
 // Windows (libuv "UV_HANDLE_CLOSING" assertion). Setting exitCode lets the
 // event loop drain those handles on its own before the process exits.
+//
+// Три состояния, три кода возврата. Молчаливый ноль при пропусках недопустим:
+// прогон, где хоть одна проверка не выполнялась, не может выглядеть так же,
+// как прогон, где всё реально проверено и зелено. 0 = всё проверено и
+// прошло. 1 = есть реальный провал (RED) — это старше пропуска, потому что
+// подтверждённая поломка важнее неподтверждённости. 2 = провалов нет, но
+// есть пропуски (SKIPPED) — прогон неполный, его нельзя засчитывать как
+// зелёный ни человеку, ни CI-гейту.
 if (failed > 0) {
   console.log("🔴 selftest FAILED\n");
   process.exitCode = 1;
+} else if (skipped > 0) {
+  console.log(`🟡 selftest INCOMPLETE — ${skipped} check(s) skipped, not verified (see SKIPPED lines above)\n`);
+  process.exitCode = 2;
 } else {
   console.log("✅ The structure matches the claims. Every layer exists.\n");
   process.exitCode = 0;

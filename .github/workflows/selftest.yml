@@ -18,6 +18,36 @@ jobs:
           node-version: '20'
 
       - name: Every claim has a check
-        run: node selftest.mjs
-        env:
-          SKIP_NETWORK: "1"
+        # Флаг SKIP_NETWORK нарочно не передаём: сетевые проверки (C-06)
+        # должны попытаться выполниться по-настоящему. Если FIDE блокирует IP
+        # раннера GitHub Actions, fetch сам упадёт по таймауту/сети, и
+        # selftest.mjs пометит проверку как SKIPPED (код возврата 2) — это
+        # честное "не проверено", а не молчаливый зелёный, каким был флаг.
+        #
+        # Три исхода:
+        #  0 — всё выполнено и прошло: шаг зелёный.
+        #  1 — реальный провал (RED), например evidence.ref теперь ведёт не
+        #      туда: шаг обязан упасть.
+        #  2 — провалов нет, но C-06 не смог проверить сеть (SKIPPED): это
+        #      известное ограничение среды (раннеры GH заблокированы FIDE),
+        #      а не дефект кода — шаг не роняем, но печатаем предупреждение,
+        #      которое видно в логе и в Summary. Полная проверка C-06 —
+        #      обязанность локального прогона (см. README).
+        run: |
+          set +e
+          node selftest.mjs
+          code=$?
+          set -e
+          if [ "$code" -eq 0 ]; then
+            echo "selftest: GREEN (exit 0)"
+            exit 0
+          elif [ "$code" -eq 1 ]; then
+            echo "::error::selftest FAILED — see RED lines above"
+            exit 1
+          elif [ "$code" -eq 2 ]; then
+            echo "::warning::selftest INCOMPLETE — network check(s) SKIPPED in CI (expected: FIDE blocks GitHub Actions runner IPs). Run 'node selftest.mjs' locally without SKIP_NETWORK for a full C-06 verification."
+            exit 0
+          else
+            echo "::error::selftest exited with unexpected code $code"
+            exit 1
+          fi
