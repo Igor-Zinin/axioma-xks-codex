@@ -30,6 +30,22 @@ function assert(condition, description) {
 
 console.log("\nGame Codex · selftest\n");
 
+/**
+ * normalizeForSearch: приводит текст к форме, устойчивой к переносам строк,
+ * неразрывным пробелам и различиям в кавычках, чтобы искать подстроку
+ * честно, а не только "текст присутствует в разметке буква в букву".
+ */
+function normalizeForSearch(text) {
+  return text
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\b\d+(?:\.\d+){2,}\b/g, " ")
+    .replace(/ /g, " ")
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // ── C-01: monorepo structure exists ──────────────────────────────────────────
 assert(existsSync(join(__dirname, "packages/auditor/auditor.mjs")),
   "C-01 · packages/auditor/auditor.mjs exists (Auditor Layer)");
@@ -69,6 +85,41 @@ if (pko) {
 
   assert(!!pko.provenance?.claim?.source,
     "C-02 · provenance.claim.source is present (knowledge has an author)");
+}
+
+// ── C-06: evidence ref actually resolves and the quote is really there ───────
+// C-02 only checked that evidence.ref is a non-empty string. That let a dead
+// link (2009 PDF cited as "2023") ship green. Zero-network is not an excuse
+// to go quiet: no network ⇒ this must fail loudly, never pass silently.
+if (pko?.layers?.evidence?.ref) {
+  const ref = pko.layers.evidence.ref;
+  const quote = pko.layers.evidence.quote;
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch(ref, { signal: controller.signal });
+    clearTimeout(timeout);
+
+    assert(res.ok,
+      `C-06 · evidence.ref resolves with HTTP 2xx (got ${res.status}) — ${ref}`);
+
+    if (res.ok && quote) {
+      const body = await res.text();
+      const found = normalizeForSearch(body).includes(normalizeForSearch(quote));
+      assert(found,
+        `C-06 · evidence.quote is found verbatim (whitespace-normalized) in the fetched source`);
+    } else if (!quote) {
+      assert(false, "C-06 · evidence.quote is present so it can be checked against the source");
+    }
+  } catch (e) {
+    // Сеть недоступна, DNS не резолвится, таймаут — что угодно. Это RED,
+    // а не пропущенная проверка: молчаливый зелёный и есть исходный дефект.
+    assert(false,
+      `C-06 · evidence.ref reachability could not be verified (${e.message}) — treated as FAILED, not skipped`);
+  }
+} else {
+  assert(false, "C-06 · evidence.ref exists so reachability can be checked");
 }
 
 // ── C-03: PKO auditor detects broken PKOs ────────────────────────────────────
@@ -136,10 +187,14 @@ for (const r of results) {
 
 console.log(`\nclaims: 5 · assertions passed: ${passed} · failed: ${failed}\n`);
 
+// process.exitCode (not process.exit()) — an abrupt exit() while the fetch
+// dispatcher in C-06 still has a keep-alive socket/timer open crashes on
+// Windows (libuv "UV_HANDLE_CLOSING" assertion). Setting exitCode lets the
+// event loop drain those handles on its own before the process exits.
 if (failed > 0) {
   console.log("🔴 selftest FAILED\n");
-  process.exit(1);
+  process.exitCode = 1;
 } else {
   console.log("✅ The structure matches the claims. Every layer exists.\n");
-  process.exit(0);
+  process.exitCode = 0;
 }
