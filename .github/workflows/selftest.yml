@@ -19,3 +19,5 @@ jobs:
 
       - name: Every claim has a check
         run: node selftest.mjs
+        env:
+          SKIP_NETWORK: "1"
