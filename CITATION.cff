@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "Game Codex: Playable Knowledge Objects Benchmark Suite"
+message: "If you use this software or knowledge object specification, please cite it as below."
+type: software
+authors:
+  - family-names: Zinin
+    given-names: Igor
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/Igor-Zinin/game-codex"
+url: "https://igor-zinin.github.io/game-codex/docs/"
+abstract: "Game Codex converts game mechanics into Playable Knowledge Objects (PKOs) — machine-verifiable, 6-layered executable knowledge capsules for human and AI decision-making benchmarks."
+keywords:
+  - game-theory
+  - ai-benchmark
+  - playable-knowledge-objects
+  - pko
+  - formal-verification
+  - chess
+license: CC-BY-4.0
+license-code: MIT
+version: 1.0.0
+date-released: 2026-08-11
