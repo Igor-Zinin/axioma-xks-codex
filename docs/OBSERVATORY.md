@@ -29,3 +29,10 @@ These projects are neighbours and references, not claims of partnership or endor
 ## What makes this project different
 
 The primary output is a capability profile and its change over time, not one composite rank. The central question is: which failure mode stopped distinguishing models, and which one remained?
+
+## First recorded result
+
+The [Chess v0.1 reference baseline](data/chess-reference-result-v0.1.json) is a
+deterministic control run: 3 trials × 5 tasks, 15/15 passed. It is not a model
+claim. Its purpose is to prove that the protocol, evaluator, and result schema
+agree before provider-backed model submissions are accepted.
