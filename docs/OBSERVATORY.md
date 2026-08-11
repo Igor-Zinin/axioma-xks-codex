@@ -44,3 +44,4 @@ read-only repository permissions.
 External researchers can follow the [submission guide](SUBMIT.md). The
 machine-readable [results registry](data/RESULTS.json) is append-only: a new
 model, protocol, or reproduction gets a new entry rather than rewriting history.
+See the [human-readable results profile](RESULTS.md) for the current state without opening JSON.
