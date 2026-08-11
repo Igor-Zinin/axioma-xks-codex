@@ -37,7 +37,7 @@ deterministic control run: 3 trials × 12 fixtures, 36/36 verdicts passed. It is
 claim. Its purpose is to prove that the protocol, evaluator, and result schema
 agree before provider-backed model submissions are accepted.
 
-The public `chess-benchmark` GitHub Actions workflow reruns the evaluator,
+The public `selftest` GitHub Actions workflow reruns the evaluator,
 baseline, and saved-result invariants on every push and pull request with
 read-only repository permissions.
 

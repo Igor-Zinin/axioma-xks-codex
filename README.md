@@ -126,7 +126,7 @@ Live: **https://igor-zinin.github.io/game-codex/docs/**
 
 ## What is not here
 
-- No external game engine is required for the first object. The `play` layer is a
+- No external game engine is required for the first public object. The `play` layer is a
   browser-native interactive scene: select the white pawn, select a destination,
   receive feedback, and see the resulting position. A richer engine may be added later.
 - No AI model — evidence must be authoritative (FIDE rules, papers, etc.).
@@ -138,14 +138,14 @@ Live: **https://igor-zinin.github.io/game-codex/docs/**
 
 ## P1: Chess vertical slice
 
-First PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/chess-en-passant-001.pko.json)
+First game PKO atom: [`knowledge/pko/chess-en-passant-001.pko.json`](knowledge/pko/chess-en-passant-001.pko.json)
 
 **Claim:** En passant is a special pawn capture valid only on the turn immediately after an opponent's double pawn advance.
 **Evidence:** FIDE Laws of Chess 2023, Article 3.7(d).
 **Status:** All 6 layers complete. selftest GREEN.
 **Readable form:** [`docs/index.html`](docs/index.html) — the same object for a human, rendered from the same JSON.
 
-The next public layer is the [Game Codex Observatory](docs/OBSERVATORY.md):
+The public evaluation layer is the [Game Codex Observatory](docs/OBSERVATORY.md):
 [Chess Benchmark v0.1](docs/CHESS-BENCHMARK-V0.1.md) defines the first capability
 profile, and [governance](docs/OBSERVATORY-GOVERNANCE.md) defines how results move
 from submitted to reproduced to verified.
