@@ -1,0 +1,525 @@
+{
+  "game": "chess",
+  "protocol": "chess-v0.1",
+  "model": "Gemini 3.6 Flash",
+  "provider": "Google Gemini via Antigravity",
+  "date": "2026-08-12T00:00:00Z",
+  "evaluator_version": "chess-evaluator@0.1.0",
+  "trials": 3,
+  "metrics": {
+    "pass_rate": 0.5,
+    "consistency": 0.5,
+    "passed": 18,
+    "failed": 18,
+    "incomplete": 0
+  },
+  "verdicts": [
+    {
+      "trial": 1,
+      "task": "legality-white-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "state-white-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 1,
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 1,
+      "task": "tactics-white-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 1,
+      "task": "explanation-white-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 1,
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 1,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    },
+    {
+      "trial": 1,
+      "task": "interactive-black-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    },
+    {
+      "trial": 2,
+      "task": "legality-white-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "state-white-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 2,
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 2,
+      "task": "tactics-white-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 2,
+      "task": "explanation-white-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 2,
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 2,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    },
+    {
+      "trial": 2,
+      "task": "interactive-black-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    },
+    {
+      "trial": 3,
+      "task": "legality-white-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-black-ep",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-white-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "legality-black-illegal-forward",
+      "family": "legality",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "state-white-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 3,
+      "task": "state-black-ep",
+      "family": "state_tracking",
+      "status": "fail",
+      "reason": "state transition does not match expected FEN"
+    },
+    {
+      "trial": 3,
+      "task": "tactics-white-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "tactics-black-ep",
+      "family": "tactics",
+      "status": "pass"
+    },
+    {
+      "trial": 3,
+      "task": "explanation-white-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 3,
+      "task": "explanation-black-ep",
+      "family": "explanation",
+      "status": "fail",
+      "reason": "explanation is not grounded in the verified rule"
+    },
+    {
+      "trial": 3,
+      "task": "interactive-white-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    },
+    {
+      "trial": 3,
+      "task": "interactive-black-ep",
+      "family": "interactive_play",
+      "status": "fail",
+      "reason": "interactive trajectory is illegal or incomplete"
+    }
+  ],
+  "raw_trajectories": [
+    {
+      "model": "gemini-antigravity",
+      "trial": 1,
+      "responses": {
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "state-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "state-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "explanation-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": "En passant capture to d6 must be performed on the next move.",
+          "completed": true
+        },
+        "explanation-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": "En passant capture to d3 must be performed on the next move.",
+          "completed": true
+        },
+        "interactive-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "interactive-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        }
+      }
+    },
+    {
+      "model": "gemini-antigravity",
+      "trial": 2,
+      "responses": {
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "state-white-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "state-black-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-white-ep": {
+          "move": "e5d6",
+          "legal": null,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-black-ep": {
+          "move": "e4d3",
+          "legal": null,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "explanation-white-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": null,
+          "explanation": "White captures the pawn en passant on d6 on the next move.",
+          "completed": true
+        },
+        "explanation-black-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": null,
+          "explanation": "Black captures the pawn en passant on d3 on the next move.",
+          "completed": true
+        },
+        "interactive-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "interactive-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        }
+      }
+    },
+    {
+      "model": "gemini-antigravity",
+      "trial": 3,
+      "responses": {
+        "legality-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-white-illegal-forward": {
+          "move": "e5e6",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "legality-black-illegal-forward": {
+          "move": "e4e3",
+          "legal": false,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "state-white-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "state-black-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "tactics-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": null,
+          "explanation": null,
+          "completed": true
+        },
+        "explanation-white-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": null,
+          "explanation": "White captures the pawn en passant on d6 on the very next move.",
+          "completed": true
+        },
+        "explanation-black-ep": {
+          "move": null,
+          "legal": null,
+          "state_fen": null,
+          "explanation": "Black captures the pawn en passant on d3 on the very next move.",
+          "completed": true
+        },
+        "interactive-white-ep": {
+          "move": "e5d6",
+          "legal": true,
+          "state_fen": "8/8/3P4/8/8/8/8/8 w - - 0 1",
+          "explanation": null,
+          "completed": true
+        },
+        "interactive-black-ep": {
+          "move": "e4d3",
+          "legal": true,
+          "state_fen": "8/8/8/8/8/3p4/8/8 b - - 0 1",
+          "explanation": null,
+          "completed": true
+        }
+      }
+    }
+  ],
+  "evidence_status": "submitted"
+}

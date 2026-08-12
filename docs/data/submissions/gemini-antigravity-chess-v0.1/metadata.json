@@ -1,0 +1,19 @@
+{
+  "model": "gemini-antigravity",
+  "provider": "Google Gemini via Antigravity",
+  "model_snapshot": "Gemini 3.6 Flash",
+  "date_utc": "2026-08-12",
+  "timezone": "UTC+01:00",
+  "trials": 3,
+  "fixtures": 12,
+  "tools_allowed": [],
+  "internet_allowed": false,
+  "private_repository_access": false,
+  "swarm_workers": 3,
+  "raw_files": [
+    "results/gemini-antigravity-trial-01.json",
+    "results/gemini-antigravity-trial-02.json",
+    "results/gemini-antigravity-trial-03.json"
+  ],
+  "score_status": "pending_external_deterministic_evaluator"
+}

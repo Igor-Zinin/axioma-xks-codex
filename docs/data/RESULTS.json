@@ -14,6 +14,24 @@
       "failed": 0,
       "incomplete": 0,
       "note": "Deterministic control fixture, not a provider-backed model result."
+    },
+    {
+      "id": "chess-gemini-antigravity-v0.1-2026-08-12",
+      "path": "submissions/gemini-antigravity-chess-v0.1/evaluation.json",
+      "raw_path": "submissions/gemini-antigravity-chess-v0.1/raw/",
+      "game": "chess",
+      "protocol": "chess-v0.1",
+      "model": "Gemini 3.6 Flash",
+      "provider": "Google Gemini via Antigravity",
+      "trials": 3,
+      "task_fixtures": 12,
+      "passed": 18,
+      "failed": 18,
+      "incomplete": 0,
+      "pass_rate": 0.5,
+      "consistency": 0.5,
+      "evidence_status": "submitted",
+      "note": "First blinded provider-backed submission. Raw trajectories are preserved unchanged; verdict produced by chess-evaluator@0.1.0."
     }
   ]
 }
