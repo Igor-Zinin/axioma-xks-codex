@@ -2,47 +2,70 @@
 
 This page is the human-readable index of the Game Codex Observatory. The machine-readable
 registry is [`data/RESULTS.json`](data/RESULTS.json); historical entries are append-only.
+A withdrawn result is marked, never deleted.
 
-## Chess v0.1
+## Chess v0.1 — `saturated`
 
 | Run | Model/provider | Trials | Fixtures | Passed | Failed | Incomplete | Status |
 |---|---|---:|---:|---:|---:|---:|---|
 | 2026-08-11 reference control | deterministic fixture / no provider | 3 | 12 | 36 | 0 | 0 | protocol check, not a model result |
-| 2026-08-12 Gemini 3.6 Flash / Antigravity | Google Gemini | 3 | 12 | 18 | 18 | 0 | submitted · 50% |
+| 2026-08-12 Gemini 3.6 Flash / Antigravity | Google Gemini | 3 | 12 | 36 | 0 | 0 | submitted · 100% · evaluator 0.2.0 |
+| ~~2026-08-12 Gemini 3.6 Flash / Antigravity~~ | ~~Google Gemini~~ | 3 | 12 | ~~18~~ | ~~18~~ | 0 | **withdrawn** · scoring error, see below |
 
-The [raw trajectories and deterministic verdict](data/submissions/gemini-antigravity-chess-v0.1/evaluation.json)
-are preserved with [run metadata](data/submissions/gemini-antigravity-chess-v0.1/metadata.json).
-The raw files were not normalized or repaired before scoring.
+The [raw trajectories](data/submissions/gemini-antigravity-chess-v0.1/raw/) are the same
+bytes in both rows: they were never normalized, repaired, or re-run. Only the evaluator
+changed.
 
-### Capability profile
+## Correction — the withdrawn 50% result
 
-The control run confirms that the protocol and evaluator agree across:
+The first published Gemini profile was wrong, and the error was ours.
 
-- legal and deliberately illegal moves;
-- white/black en-passant symmetry;
-- board-state reconstruction;
-- tactical and explanation fields;
-- multi-turn interactive trajectories.
+The sterile kit handed to the evaluated model specified a response object with the fields
+`move`, `legal`, `state_fen`, `explanation`, `completed`. Evaluator 0.1.0 read `moves` and
+`text`. The model answered in the shape it was given — every fixture, every trial — and was
+scored as though it had failed to follow the protocol. Three whole task families were
+published as 0/6 while the submitted answers were correct: the FENs matched the expected
+positions exactly, and the explanations contained the required concepts and none of the
+forbidden ones.
 
-The first provider profile shows a useful split: Gemini passed all legality and tactics
-fixtures (18/18) but failed state tracking, explanation, and interactive-play fixtures
-(18/18). It returned correct-looking FENs in some state and interactive fields, but the
-protocol requires move trajectories and grounded explanation text; the evaluator therefore
-does not infer missing fields.
+Two independent statements of one contract existed in this project, and nothing compared
+them. That is the defect, and it is fixed at the root rather than patched: the response
+contract is now a single file, [`data/chess-response-contract-v0.1.json`](data/chess-response-contract-v0.1.json),
+from which both the evaluator and the submitter's prompt are derived. The reference baseline
+is generated from it by `scripts/make-baseline.mjs` instead of being maintained by hand, and
+the selftest fails if the two ever diverge again.
 
-It does not measure an AI provider. No model score is claimed until a submission includes
-the model snapshot, provider, prompt, tools, sampling configuration, raw responses, cost,
-latency, and the deterministic verdict produced by the pinned evaluator.
+Evaluator 0.2.0 also separates `contract_violation` — a required field absent while the model
+claims completion — from `fail`. Under 0.1.0 those two were the same number, which is why a
+compliant model and a wrong model looked alike.
+
+The reference control run scores 36/36 under both evaluator versions. The change did not
+loosen the protocol; it stopped the protocol from reading a field nobody was asked to send.
+
+## Why this protocol is now marked `saturated`
+
+A 100% profile does not separate models. Chess v0.1 rests on two en-passant positions, and
+its `state_tracking` and `interactive_play` families each contain a single move — so neither
+measures a trajectory, whatever their names promise. It was a working instrument for proving
+that the pipeline runs end to end. It is not an instrument for comparing providers.
+
+Per the saturation rule, v0.1 stays in the historical record with its scores intact. A second
+provider profile against it would produce another 36/36 and mean nothing. New positions,
+out-of-distribution states, and genuine multi-turn trajectories belong to a new protocol
+version, and old scores are not rewritten.
 
 ## Reading the numbers
 
-`passed`, `failed`, and `incomplete` are kept separate. A timeout, unparsable response, or
-unfinished interaction is not silently converted into a loss or a pass. A future model
-entry should be compared by capability profile and by trial history, not by one composite
-number.
+`passed`, `failed`, `contract_violations`, and `incomplete` are kept separate. A timeout,
+unparsable response, or unfinished interaction is not silently converted into a loss or a
+pass. A model entry should be compared by capability profile and trial history, not by one
+composite number.
+
+Known gap in the 2026-08-12 run: per-trial start and end timestamps were not recorded. The
+date carries a technical `00:00Z` and has not been back-dated to a guess. Timestamps are
+mandatory from v0.2 onward.
 
 ## Next public result
 
-The next milestone is an independently generated second provider profile, preferably
-Claude Opus under the same blinded protocol. The Gemini entry remains `submitted` until
-an independent reproduction is available.
+Chess v0.2 first — a protocol that can still tell two models apart. A second provider profile
+is only meaningful once there is something left to measure.

@@ -1,0 +1,28 @@
+{
+  "contract": "chess-response-v0.1",
+  "version": "1.0.0",
+  "note": "The single source of truth for what a submitted response must contain. The prompt given to an evaluated model and the evaluator MUST both be derived from this file. Two independent statements of the response shape produced the 2026-08-12 mis-scoring: the prompt asked for `state_fen` and `explanation`, the evaluator read `moves` and `text`, and a fully compliant model was published at half its actual score.",
+  "response_object": {
+    "description": "One object per fixture id, containing every field below. Fields that do not apply to the fixture family are set to null; no field is omitted.",
+    "fields": {
+      "move": "long algebraic move, e.g. \"e5d6\"",
+      "legal": "boolean verdict on the move",
+      "state_fen": "full FEN of the resulting position",
+      "explanation": "free text explaining the move",
+      "completed": "false means the model could not complete the task; it is scored `incomplete`, never `fail`"
+    }
+  },
+  "families": {
+    "legality": { "required": ["move", "legal"] },
+    "tactics": { "required": ["move"] },
+    "state_tracking": { "required": ["state_fen"] },
+    "interactive_play": { "required": ["move", "state_fen"] },
+    "explanation": { "required": ["explanation"] }
+  },
+  "verdicts": {
+    "pass": "every required field present and correct",
+    "fail": "required fields present, at least one answer wrong",
+    "contract_violation": "a required field is absent or null while `completed` is true — the model answered but not in the required shape",
+    "incomplete": "the model declared `completed: false`, or the fixture has no response at all"
+  }
+}

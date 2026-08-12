@@ -4,7 +4,7 @@ The Observatory accepts results as JSON trajectories. The evaluator never calls 
 
 ## 1. Prepare a submission
 
-Start from [`chess-baseline-v0.1.json`](data/chess-baseline-v0.1.json), replace the `model`, `provider`, `date`, and each trial response, and keep the protocol identifier unchanged:
+The response shape is declared in exactly one place: [`chess-response-contract-v0.1.json`](data/chess-response-contract-v0.1.json). Do not restate it in your own words — derive your prompt from that file. Every fixture gets one object carrying every field, with `null` where a field does not apply:
 
 ```json
 {
@@ -13,11 +13,15 @@ Start from [`chess-baseline-v0.1.json`](data/chess-baseline-v0.1.json), replace 
   "model": "provider/model-version",
   "provider": "provider-name",
   "date": "2026-08-11T00:00:00Z",
-  "trials": [{"responses": {"legality-001": {"move": "e5d6"}}}]
+  "trials": [{"responses": {"legality-white-ep": {
+    "move": "e5d6", "legal": true, "state_fen": null, "explanation": null, "completed": true
+  }}}]
 }
 ```
 
-The complete task set is in [`chess-benchmark-v0.1.json`](data/chess-benchmark-v0.1.json). Three independent trials are the minimum for a comparable submission. Include the prompt, tools, sampling settings, cost, latency, and raw trajectories in the accompanying report; do not silently omit incomplete attempts.
+The complete task set is in [`chess-benchmark-v0.1.json`](data/chess-benchmark-v0.1.json). Three independent trials are the minimum for a comparable submission. Include the prompt verbatim, tools, sampling settings, per-trial start and end timestamps, cost, latency, and raw trajectories in the accompanying report; do not silently omit incomplete attempts.
+
+**The prompt is part of the evidence, not a working note.** Submit it unedited. Without it, a low score cannot be told apart from a contract the model was never shown — which is exactly how the first published provider result came to understate a compliant model by half.
 
 ## 2. Run the evaluator
 
@@ -27,7 +31,7 @@ node scripts/chess-evaluator.mjs \
   --output path/to/result.json
 ```
 
-The evaluator returns `pass`, `fail`, or `incomplete` per task and produces a result envelope matching [`RESULT-SCHEMA.json`](RESULT-SCHEMA.json). A submission is `submitted` until an independent run reproduces it; only then can it become `reproduced` or `verified`.
+The evaluator returns `pass`, `fail`, `contract_violation`, or `incomplete` per task and produces a result envelope matching [`RESULT-SCHEMA.json`](RESULT-SCHEMA.json). A submission is `submitted` until an independent run reproduces it; only then can it become `reproduced` or `verified`.
 
 ## 3. Open a pull request
 

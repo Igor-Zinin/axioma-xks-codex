@@ -1,6 +1,24 @@
-# Chess Benchmark v0.1
+# Chess Benchmark v0.1 — `saturated`
+
+> **Status: saturated as of 2026-08-12.** The first provider-backed run returned 36/36, and
+> the reference control returns 36/36. A protocol where every participant scores full marks
+> reports nothing about the participants. v0.1 stays in the record with its scores intact;
+> new measurement belongs to a new protocol version. See [Saturation rule](#saturation-rule)
+> and [RESULTS.md](RESULTS.md).
+>
+> Two known reasons it cannot discriminate: every fixture rests on the same two en-passant
+> positions, and the `state_tracking` and `interactive_play` families contain a single move
+> each — neither measures a trajectory, whatever the family name promises.
 
 This is the first protocol of the Game Codex Observatory. It measures a model or agent through a fixed interface and reports a capability profile, not a single rank.
+
+## Response contract
+
+The fields a submission must contain are declared once, in
+[`data/chess-response-contract-v0.1.json`](data/chess-response-contract-v0.1.json). The
+evaluator, the reference baseline, and the prompt given to an evaluated model are all derived
+from that file. Restating the shape anywhere else creates a second contract, and on
+2026-08-12 a second contract cost a compliant model half its score.
 
 ## Task families
 

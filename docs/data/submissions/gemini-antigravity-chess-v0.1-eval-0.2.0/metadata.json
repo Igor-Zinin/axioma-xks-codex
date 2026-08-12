@@ -1,0 +1,28 @@
+{
+  "model": "gemini-antigravity",
+  "provider": "Google Gemini via Antigravity",
+  "model_snapshot": "Gemini 3.6 Flash",
+  "date_utc": "2026-08-12",
+  "timezone": "UTC+01:00",
+  "trials": 3,
+  "fixtures": 12,
+  "tools_allowed": [],
+  "internet_allowed": false,
+  "private_repository_access": false,
+  "swarm_workers": 3,
+  "response_contract": "chess-response-v0.1",
+  "evaluator_version": "chess-evaluator@0.2.0",
+  "raw_files": [
+    "../gemini-antigravity-chess-v0.1/raw/trial-01.json",
+    "../gemini-antigravity-chess-v0.1/raw/trial-02.json",
+    "../gemini-antigravity-chess-v0.1/raw/trial-03.json"
+  ],
+  "raw_files_note": "The raw responses are the same bytes scored on 2026-08-12 under evaluator 0.1.0; they are referenced, not copied, so one run cannot come to have two raw records. Verified identical by hash against the source kit before rescoring.",
+  "rescore_reason": "The 0.1.0 verdict was withdrawn. It read `moves` and `text`; the prompt handed to the model (PROMPT-ROYA.md in the sterile kit) required `state_fen` and `explanation`. The model answered in the shape it was given, in all 12 fixtures across all 3 trials. The published 18/36 measured the disagreement between our own two statements of the contract, not the model.",
+  "known_limitations": [
+    "Trial start/end timestamps were not recorded; the date carries a technical 00:00Z and is not back-dated to a guess.",
+    "A 36/36 profile does not separate models: chess v0.1 is saturated and is marked as such in the protocol.",
+    "state_tracking and interactive_play each contain a single move, so neither yet measures a trajectory."
+  ],
+  "score_status": "scored_by_public_deterministic_evaluator"
+}

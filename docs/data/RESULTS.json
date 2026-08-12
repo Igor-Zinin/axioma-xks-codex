@@ -13,7 +13,8 @@
       "passed": 36,
       "failed": 0,
       "incomplete": 0,
-      "note": "Deterministic control fixture, not a provider-backed model result."
+      "note": "Deterministic control fixture, not a provider-backed model result.",
+      "evaluator_version": "chess-evaluator@0.2.0"
     },
     {
       "id": "chess-gemini-antigravity-v0.1-2026-08-12",
@@ -30,8 +31,30 @@
       "incomplete": 0,
       "pass_rate": 0.5,
       "consistency": 0.5,
+      "evidence_status": "withdrawn",
+      "note": "WITHDRAWN 2026-08-12. Scored against field names the evaluated model was never given; see evaluation.json. Kept for the record, not as a result. Raw trajectories unchanged.",
+      "evaluator_version": "chess-evaluator@0.1.0"
+    },
+    {
+      "id": "chess-gemini-antigravity-v0.1-eval-0.2.0-2026-08-12",
+      "path": "submissions/gemini-antigravity-chess-v0.1-eval-0.2.0/evaluation.json",
+      "raw_path": "submissions/gemini-antigravity-chess-v0.1/raw/",
+      "game": "chess",
+      "protocol": "chess-v0.1",
+      "model": "Gemini 3.6 Flash",
+      "provider": "Google Gemini via Antigravity",
+      "trials": 3,
+      "task_fixtures": 12,
+      "passed": 36,
+      "failed": 0,
+      "contract_violations": 0,
+      "incomplete": 0,
+      "pass_rate": 1,
+      "consistency": 1,
+      "evaluator_version": "chess-evaluator@0.2.0",
+      "response_contract": "chess-response-v0.1",
       "evidence_status": "submitted",
-      "note": "First blinded provider-backed submission. Raw trajectories are preserved unchanged; verdict produced by chess-evaluator@0.1.0."
+      "note": "Same raw trajectories, rescored against the contract the model was actually given. Supersedes the withdrawn 0.1.0 verdict. A perfect profile means chess v0.1 does not separate models: the protocol is marked saturated."
     }
   ]
 }

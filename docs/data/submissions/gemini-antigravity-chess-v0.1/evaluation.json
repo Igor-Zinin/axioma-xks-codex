@@ -521,5 +521,11 @@
       }
     }
   ],
-  "evidence_status": "submitted"
+  "evidence_status": "withdrawn",
+  "withdrawn": {
+    "date": "2026-08-12",
+    "reason": "Evaluator 0.1.0 read the response fields `moves` and `text`. The prompt given to the evaluated model required `state_fen` and `explanation`. The model complied with the contract it was shown, in all 12 fixtures across all 3 trials; this verdict measured the disagreement between two statements of the contract inside this project, and attributed it to the model.",
+    "superseded_by": "submissions/gemini-antigravity-chess-v0.1-eval-0.2.0/evaluation.json",
+    "raw_unchanged": "The raw trajectories in ./raw/ are untouched and remain the sole record of what the model produced."
+  }
 }

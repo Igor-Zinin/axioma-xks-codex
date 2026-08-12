@@ -7,6 +7,7 @@
  */
 
 import { readFileSync, existsSync, readdirSync } from "fs";
+import { execFileSync } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { runAudit } from "./packages/auditor/auditor.mjs";
@@ -227,6 +228,42 @@ if (existsSync(PAGE_PATH)) {
   assert(!/https?:\/\/(cdn|unpkg|cdnjs|fonts)\./.test(page),
     "C-05 · page has no CDN or web-font dependency (opens offline)");
 }
+
+// ── C-07: one response contract, and a machine that catches a second one ──────
+// Поймано 2026-08-12. Форма ответа была записана дважды: в промпте стерильного
+// набора (`state_fen`, `explanation`) и в эвалюаторе (`moves`, `text`). Никто их
+// не сравнивал. Модель выполнила тот контракт, который ей показали, и была
+// опубликована с 18/36 вместо 36/36 — с объяснением, что это она не соблюла
+// протокол. Тот же класс, что PULSE_DIR: два списка, ни одной машины между ними.
+const contract = JSON.parse(readFileSync(join(__dirname, "docs/data/chess-response-contract-v0.1.json"), "utf8"));
+const benchmark = JSON.parse(readFileSync(join(__dirname, "docs/data/chess-benchmark-v0.1.json"), "utf8"));
+
+const families = [...new Set(benchmark.tasks.map((t) => t.family))];
+for (const family of families) {
+  assert(Array.isArray(contract.families?.[family]?.required),
+    `C-07 · family "${family}" declares its required response fields in the contract`);
+}
+
+// Эталон обязан быть ровно тем, что производит генератор: правка руками означает,
+// что форма ответа снова описана в двух местах.
+const baselinePath = join(__dirname, "docs/data/chess-baseline-v0.1.json");
+const baselineBefore = readFileSync(baselinePath, "utf8");
+execFileSync(process.execPath, [join(__dirname, "scripts/make-baseline.mjs")], { stdio: "pipe" });
+assert(readFileSync(baselinePath, "utf8") === baselineBefore,
+  "C-07 · baseline is byte-identical to what make-baseline.mjs generates (not hand-edited)");
+
+// Сквозная проверка: эталон, прогнанный через эвалюатор, обязан дать чистые 36/36
+// без единого contract_violation. Расхождение имён полей падает именно здесь.
+const evalOut = join(__dirname, "docs/data/chess-reference-result-v0.1.json");
+execFileSync(process.execPath, [join(__dirname, "scripts/chess-evaluator.mjs"),
+  "--input", baselinePath, "--output", evalOut], { stdio: "pipe" });
+const refResult = JSON.parse(readFileSync(evalOut, "utf8"));
+assert(refResult.metrics.contract_violations === 0,
+  `C-07 · reference baseline produces 0 contract violations (got ${refResult.metrics.contract_violations})`);
+assert(refResult.metrics.passed === benchmark.tasks.length * refResult.trials,
+  `C-07 · reference baseline passes every fixture in every trial (${refResult.metrics.passed}/${benchmark.tasks.length * refResult.trials})`);
+assert(refResult.response_contract === contract.contract,
+  "C-07 · evaluator stamps the contract id it scored against into the result");
 
 // ── Print results ─────────────────────────────────────────────────────────────
 const LABEL = { pass: "GREEN  ", fail: "RED    ", skip: "SKIPPED" };
