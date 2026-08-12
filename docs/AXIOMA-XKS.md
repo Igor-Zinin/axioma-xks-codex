@@ -31,37 +31,45 @@ that will drift.
 
 ## The spine
 
-Six fields are required in every capsule of every profile:
+Seven fields are required in every capsule of every profile:
 
 | Field | What it carries | Why it is mandatory |
 |---|---|---|
-| `xks_version` | format version | so a reader can refuse what it does not understand instead of guessing |
+| `xks_version` | version of *this format* | so a reader can refuse what it does not understand instead of guessing. Not the version of the thing described — see `module-passport.version` |
 | `id` | stable identifier | never reused for a different subject; a citation must stay pointed at one thing |
+| `profile` | which profile's rules apply | a reader must not have to infer this from which optional fields happen to be present |
 | `claim` | one assertion | one per capsule — a capsule asserting two things cannot be retracted by halves |
 | `provenance` | author and date | an assertion without an author can only be believed, not audited |
-| `confidence` | number, 0..1 | declared, never inferred by the reader from fluency |
-| `decay` | expiry and trigger | a claim with no expiry silently becomes a claim about the past |
+| `confidence` | number, 0..1 | declared, never inferred by the reader from fluency. The author's stated belief, **not** a calibrated probability, and it must not be read as one |
+| `decay` | expiry **and** trigger | a claim with no expiry silently becomes a claim about the past |
 
-A file missing any of these is not an Axioma-XKS capsule, whatever else it contains.
+`provenance` and `decay` are objects, not strings, and their required sub-fields are declared
+in the schema: `provenance.claim.source` and `.timestamp`, `decay.check_after` and `.trigger`.
+A file missing any of this is not an Axioma-XKS capsule, whatever else it contains.
 
 ## Profiles
 
-The spine is shared; what sits on top of it depends on what is being described.
+The spine is shared; what sits on top of it depends on what is being described. Which profile
+applies is stated by the capsule, in `profile` — never guessed by the reader.
 
 **`knowledge-object`** — a claim about the world, published for people and machines at once.
-Six layers, all mandatory: an `answer` a person can read, `evidence` an auditor can follow, a
-`model` that can be reasoned with, a `play` scene a learner can act in, a `quiz` that tests
-understanding, and a `machine` layer carrying an executable criterion.
+Requires a `domain` and a `layers` object containing six layers, all mandatory: an `answer` a
+person can read, `evidence` an auditor can follow, a `model` that can be reasoned with, a
+`play` scene a learner can act in, a `quiz` that tests understanding, and a `machine` layer
+carrying a runnable criterion. The six are keys inside `layers`, not top-level fields.
 
 Two rules do the real work here. `evidence` must carry a reference that resolves *and* a quote
 that is verbatim present at it — the presence of a non-empty string is not evidence, and this
 project shipped a green test for a month on exactly that confusion. `machine` must carry a
 criterion someone can actually run; a criterion nobody can run is a promise wearing the
-clothes of a check.
+clothes of a check. What "runnable" does **not** yet mean is set out under
+[Known gaps](#known-gaps) — v1 specifies no execution environment.
 
-**`module-passport`** — a capsule describing a living software module: what it is, which files
-it is made of, and which tests verify it. Its `version` must equal the version the module
-reports to its users; two version numbers for one module is the same defect as two contracts.
+**`module-passport`** — a capsule describing a living software module. Requires `title`,
+`version`, `lifecycle`, and `kind`; `components` and `tests` are optional manifests of the
+files it is made of and the verifiers that check it. Its `version` must equal the version the
+module reports to its users — two version numbers for one module is the same defect as two
+contracts — and it is a different field from `xks_version`, which versions the capsule format.
 
 ## Closed vocabularies, declared extensions
 
@@ -77,6 +85,18 @@ the capsule uses, and its absence means the base one. A reader that meets a prof
 not know must say *"unknown vocabulary"* — not *"invalid capsule"*. Otherwise an extension is
 indistinguishable from corruption, and the format punishes precisely the users who grow.
 
+That obligation is empty unless it says what the capsule's *status* then is, so: the capsule
+is conformant to the spine and to its profile's structural rules, and exactly one field — the
+one governed by the unknown vocabulary — is unverified. A validator reports this as a **third
+outcome**, distinct from both pass and fail, and must not let the capsule reach "fully
+verified" while it stands. Two outcomes cannot carry three states: collapse it into failure
+and extension dies, collapse it into success and a hallucinated profile name walks straight
+through validation.
+
+The mechanism covers `lifecycle` **only**. `kind` is closed with no extension path in v1 —
+a corpus needing a new kind has to fork. That is a gap, not a design choice, and it is listed
+as one below.
+
 The worked example is real, not hypothetical. An adjacent corpus by the same author keeps a
 seventh lifecycle value, `historical`, because a withdrawn topic in a knowledge map has to
 read differently from a deprecated software module: knowledge does not die the way code does.
@@ -88,15 +108,56 @@ thing they see.
 A published capsule is never edited to hide an error, and never deleted. It is marked
 withdrawn, with the reason and a pointer to what replaces it.
 
+Concretely: `evidence_status` becomes `withdrawn` and a `withdrawn` object carries `date`,
+`reason`, and `superseded_by`. The claim, the evidence, and the original identifier stay
+exactly as published — a retraction that edits the claim is not a retraction.
+
 A corpus that quietly revises itself cannot be cited, because the citation would point at
 whatever the text happens to say today. Retraction is what makes a record load-bearing, and
 it is cheap to promise and expensive to keep.
 
-## What this format caught in its own author
+## What this format did *not* catch in its own author
 
-The honest argument for a format about decay is not a manifesto. It is the list of things it
-caught in the corpus of the person proposing it — all of it public, all of it in this
-repository's history.
+The first version of this section said the errors below were things "the format caught". The
+first external reviewer — a model from another vendor, reading this cold — called that
+self-congratulation wearing the clothes of honesty, and was right. The correction stands here
+rather than being quietly swapped in, because that is the behaviour the rest of this document
+demands.
+
+Here is the accurate account. Four errors, all public, all in this repository's history, and
+**not one of them was caught by the capsule format.**
+
+**A benchmark answer key wrong in half its fixtures.** Six of twelve chess fixtures asserted
+the wrong answer, because none of the positions contained a king and hand-written move logic
+stood in for an engine, reproducing its author's misunderstanding of two rules. *Caught by:*
+a second model, from another vendor, disagreeing with the key twice in a row. The format
+played no part. See [the retirement notice](CHESS-BENCHMARK-V0.1.md) and
+[the finding](data/submissions/claude-opus-4-6-chess-v0.1/FINDING.md).
+
+**A published result that understated another vendor's model by half.** The prompt given to
+an evaluated model specified one response shape; the evaluator read another. *Caught by:* a
+person opening both files and comparing them. The format played no part. See
+[RESULTS.md](RESULTS.md).
+
+**One chess position recorded three times, three different ways.** *Caught by:* the same
+manual investigation. If anything, this is an error the format's own one-claim-one-place
+principle would have prevented had it been applied — its absence caused the error rather than
+its presence catching it.
+
+**A citation stitched from three editions** — a quote from the 2023 rules, an article number
+from 2009, a link to the 2009 PDF. *Caught by:* a test that fetches the reference and looks
+for the quote in the response body. That test is the closest thing here to a win, and it is a
+test, not a format.
+
+So what does the format actually contribute? One thing, and it is smaller than the earlier
+version claimed but not nothing: **it makes the fields exist so a check can be written against
+them.** A capsule with no `evidence.ref` gives a test nothing to fetch; a claim with no
+`decay.check_after` gives a scheduler no date to fire on; a corpus with no declared
+`confidence` leaves a reader inferring certainty from fluency. The format does not do the
+checking. It removes the excuse that there was nothing to check.
+
+Two of these errors were found only because a **different model** disagreed, which is worth
+more than any field in the schema — and is exactly how this section came to be rewritten.
 
 **A benchmark answer key that was wrong in half its fixtures.** Six of twelve chess fixtures
 asserted the wrong answer. The root cause was structural: none of the positions contained a
@@ -123,12 +184,66 @@ Every one of these is exactly what the six spine fields exist to make visible: a
 evidence nobody followed, a confidence nobody declared, an expiry nobody set. The format did not
 prevent them. It made them findable, and it required saying so out loud afterwards.
 
+## Known gaps
+
+Named here rather than left for a reader to find. A specification that hides its own holes is
+the thing this project keeps catching in other people's work and in its own. All six were
+raised by the first external review, and none is fixed in v1.
+
+**The `machine` layer has no execution environment.** No runtime, no parameter contract, no
+sandbox boundary, no output schema. A conforming reader can verify that a criterion is
+*present*, not run it unattended. Until that is specified, the claim that this format makes
+"still true" an automatically answerable question **is not earned** — a criterion here is
+something a human or a project's own CI runs.
+
+**`evidence.ref` has no resolution protocol.** The spec does not say whether `ref` is a URL, a
+DOI, a git object, or a path, nor how to handle redirects, auth, paywalls, client-rendered
+pages, or a source that moves. The reference implementation handles HTTP(S) and reports an
+unreachable source as *unverified* rather than *broken*; that is one implementation's choice,
+not a rule of the format.
+
+**No integrity binding.** A capsule carries no digest or signature over its own content. A
+reader cannot distinguish a capsule altered after publication from one that was not.
+Provenance names an author; it does not bind the bytes.
+
+**`kind` cannot be extended.** `lifecycle` has a declared extension path and `kind` has none.
+A corpus needing a new kind has to fork.
+
+**This schema is not a schema.** `axioma-xks-spine-v1.json` is a description with normative
+prose inside it, not JSON Schema. It cannot be handed to an off-the-shelf validator, so every
+implementation writes its own reader — which is precisely the situation that lets two readers
+drift apart.
+
+**`knowledge-object` is coupled to teaching.** Making `play` and `quiz` mandatory suits
+knowledge somebody practises and fits badly around a dataset or an operational fact. Filling
+those layers with placeholders to satisfy the schema would be a stub, and stubs are what this
+project calls lying about readiness.
+
 ## Conformance
 
 `node selftest.mjs` checks, among other things, that every capsule published here satisfies the
 spine and its declared profile, that every `evidence.ref` resolves and its quote is verbatim
 present at the source, and that no generated artifact has been hand-edited. Network checks that
 cannot run report `SKIPPED` — a run with a skipped check is incomplete, not green.
+
+## Review history
+
+**2026-08-12 — first external review.** Gemini 3.6 Flash, cold read, no access to this project
+beyond the two published files. Seven questions, seven answers, all critical. It found the
+prose and the schema disagreeing in three places, an unhandled ambiguity in the extension
+rule, six unstated gaps, and a section that flattered its author. Schema v1.1 and this
+revision of the prose are the response; the review itself is preserved unedited at
+[`reviews/2026-08-12-gemini-3-6-flash.md`](reviews/2026-08-12-gemini-3-6-flash.md),
+alongside [the prompt it answered](reviews/2026-08-12-prompt.md) — a review without its
+prompt cannot be told apart from a review that was steered.
+
+Two findings deserve naming, because they land on this document's own principle. The spine had
+**no field declaring which profile applied** — so this project's validator guessed
+`knowledge-object` for every capsule, which is a reader inferring what the author should have
+stated. And that validator was enforcing sub-fields of `decay` the schema never declared:
+**the test knew more about the format than the specification did.** That is the two-statements
+defect this document exists to prevent, found inside the document itself, by a stranger,
+within hours of publication.
 
 ## Status and citation
 

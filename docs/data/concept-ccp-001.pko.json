@@ -1,10 +1,11 @@
 {
   "id": "concept-ccp-001",
+  "profile": "knowledge-object",
   "xks_version": "1.0",
   "claim": "Playable Knowledge Object (PKO) состоит из 6 обязательных слоёв (Answer, Evidence, Model, Play, Quiz, Machine), соединяющих первоисточник знания с его исполняемой машинной проверкой.",
   "game": "meta",
   "domain": "epistemology",
-  "confidence": 1.0,
+  "confidence": 1,
   "provenance": {
     "claim": {
       "source": "Playable Knowledge Objects Specification & Benchmark Standard v1.0",

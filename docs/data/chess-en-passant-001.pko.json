@@ -1,10 +1,11 @@
 {
   "id": "chess-en-passant-001",
+  "profile": "knowledge-object",
   "xks_version": "1.0",
   "claim": "En passant — это особый ход пешки, при котором она берёт вражескую пешку «на проходе». Действует только в ход сразу после двойного хода противника.",
   "game": "chess",
   "domain": "game-mechanics",
-  "confidence": 1.0,
+  "confidence": 1,
   "provenance": {
     "claim": {
       "source": "FIDE Laws of Chess, действующий свод (в силе с 1 января 2023), Article 3.7.3.1–3.7.3.2",
@@ -21,14 +22,12 @@
       "language": "ru",
       "reading_level": "beginner"
     },
-
     "evidence": {
       "ref": "https://handbook.fide.com/chapter/e012023",
       "section": "Article 3.7.3.1–3.7.3.2",
       "quote": "A pawn occupying a square on the same rank as and on an adjacent file to an opponent's pawn which has just advanced two squares in one move from its original square may capture this opponent's pawn as though the latter had been moved only one square. This capture is only legal on the move following this advance and is called an 'en passant' capture.",
       "type": "authoritative-rule"
     },
-
     "model": {
       "description": "Условия для en passant (работают симметрично для обеих сторон): (1) Ход делается пешкой на своей 5-й горизонтали относительно направления атаки — 5-й для белых, 4-й для чёрных. (2) Противник только что сделал двойной ход пешкой на соседний столбец. (3) Взятие возможно ТОЛЬКО в следующий ход — «право сгорает».",
       "formal": {
@@ -41,7 +40,6 @@
         "result": "attacker_pawn moves diagonally, opponent_pawn removed from board"
       }
     },
-
     "play": {
       "type": "browser-interactive-scene",
       "config": {
@@ -52,13 +50,16 @@
           "success_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
           "instruction": "Белая пешка на e5. Чёрная только что сделала двойной ход d7-d5. Возьми её en passant! Нажми на пешку e5, затем на клетку d6.",
           "solution": "e5d6",
-          "highlight_squares": ["e5", "d5", "d6"],
+          "highlight_squares": [
+            "e5",
+            "d5",
+            "d6"
+          ],
           "on_success": "Правильно! Пешка d5 взята. Белая пешка теперь на d6.",
           "on_fail": "Попробуй ещё раз. Можно взять пешку d5, пройдя на d6."
         }
       }
     },
-
     "quiz": {
       "questions": [
         {
@@ -87,7 +88,6 @@
         }
       ]
     },
-
     "machine": {
       "local_check": "npm run benchmark:chess",
       "acceptance_sql": "SELECT COUNT(*) > 0 AS passed FROM pko_runs WHERE pko_id = 'chess-en-passant-001' AND layer = 'play' AND outcome = 'success' AND run_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)",

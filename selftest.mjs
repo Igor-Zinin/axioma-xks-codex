@@ -285,8 +285,14 @@ for (const file of pkoFiles) {
   assert(missingSpine.length === 0,
     `C-08 · [${id}] carries every spine field${missingSpine.length ? ` (missing: ${missingSpine.join(", ")})` : ""}`);
 
-  // Профиль knowledge-object: шесть слоёв обязательны, и список берётся из схемы.
-  const profile = spine.profiles["knowledge-object"];
+  // Профиль берётся ИЗ КАПСУЛЫ, а не угадывается. До 12.08 здесь было жёстко
+  // прописано "knowledge-object", то есть капсула-паспорт модуля проверялась бы
+  // правилами объекта знания и прошла бы мимо своих собственных. Нашла это
+  // холодная вычитка спецификации чужой моделью: поле `profile` в хребте
+  // отсутствовало вовсе, и валидатор угадывал за автора.
+  assert(!!spine.profiles[obj.profile],
+    `C-08 · [${id}] declares a profile the spec knows (got ${JSON.stringify(obj.profile)})`);
+  const profile = spine.profiles[obj.profile] || spine.profiles["knowledge-object"];
   const missingReq = profile.required.filter((f) => obj[f] === undefined || obj[f] === null);
   assert(missingReq.length === 0,
     `C-08 · [${id}] satisfies the knowledge-object profile${missingReq.length ? ` (missing: ${missingReq.join(", ")})` : ""}`);
@@ -300,10 +306,15 @@ for (const file of pkoFiles) {
   assert(typeof obj.confidence === "number" && obj.confidence >= 0 && obj.confidence <= 1,
     `C-08 · [${id}] declares confidence as a number in 0..1 (got ${JSON.stringify(obj.confidence)})`);
 
-  // Срок годности обязан называть И когда перепроверить, И что это спровоцирует.
-  // Дата без триггера превращает протухание в календарную формальность.
-  assert(!!obj.decay?.check_after && !!obj.decay?.trigger,
-    `C-08 · [${id}] decay names both a re-check date and the trigger that would invalidate the claim`);
+  // Подполя читаются из схемы, а не перечисляются здесь. До 12.08 этот тест
+  // требовал `decay.check_after` и `decay.trigger`, которых схема не объявляла:
+  // тест знал о формате больше, чем спецификация. Тот же дефект двух описаний,
+  // от которого спецификация и написана, — найден внутри неё самой.
+  for (const [field, spec] of Object.entries(spine.spine.substructure || {})) {
+    const missing = (spec.required || []).filter((k) => !obj[field]?.[k]);
+    assert(missing.length === 0,
+      `C-08 · [${id}] ${field} carries its declared sub-fields${missing.length ? ` (missing: ${missing.join(", ")})` : ""}`);
+  }
 
   // Если капсула объявила расширение словаря — оно обязано быть объявлено полем,
   // а не подразумеваться. Незнакомый профиль здесь не провал: правило схемы велит
