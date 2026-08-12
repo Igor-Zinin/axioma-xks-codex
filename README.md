@@ -1,9 +1,9 @@
-# game-codex — Playable Knowledge Factory
+# axioma-xks-codex — Playable Knowledge Factory
 
-[![selftest](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igor-Zinin/game-codex/actions/workflows/selftest.yml)
+[![selftest](https://github.com/Igor-Zinin/axioma-xks-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igor-Zinin/axioma-xks-codex/actions/workflows/selftest.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE-CODE)
 [![knowledge: CC BY 4.0](https://img.shields.io/badge/knowledge-CC%20BY%204.0-lightgrey)](LICENSE)
-[![live page](https://img.shields.io/badge/live-igor--zinin.github.io%2Fgame--codex-blue)](https://igor-zinin.github.io/game-codex/docs/)
+[![live page](https://img.shields.io/badge/live-igor--zinin.github.io%2Fgame--codex-blue)](https://igor-zinin.github.io/axioma-xks-codex/docs/)
 
 ---
 
@@ -69,8 +69,8 @@ observatory log; the public `local_check` is the reproducible source of truth.
 ## Quick start
 
 ```bash
-git clone https://github.com/Igor-Zinin/game-codex
-cd game-codex
+git clone https://github.com/Igor-Zinin/axioma-xks-codex
+cd axioma-xks-codex
 node selftest.mjs
 ```
 
@@ -120,7 +120,7 @@ field, quiz with hidden answers, and the machine criterion. Nothing is retyped i
 the HTML — every value is read from the `.pko.json` at runtime, and an empty field is
 drawn as a dash rather than filled in with a guess.
 
-Live: **https://igor-zinin.github.io/game-codex/docs/**
+Live: **https://igor-zinin.github.io/axioma-xks-codex/docs/**
 
 ---
 

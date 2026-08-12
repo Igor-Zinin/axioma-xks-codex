@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const evaluator = path.join(root, "scripts", "chess-evaluator.mjs");
 const baseline = path.join(root, "docs", "data", "chess-baseline-v0.1.json");
-const temp = path.join(os.tmpdir(), `game-codex-chess-negative-${process.pid}.json`);
+const temp = path.join(os.tmpdir(), `axioma-xks-codex-chess-negative-${process.pid}.json`);
 const bad = JSON.parse(fs.readFileSync(baseline, "utf8"));
 bad.trials[0].responses["legality-white-ep"].move = "e5e6";
 fs.writeFileSync(temp, JSON.stringify(bad));

@@ -7,12 +7,12 @@
 Game Codex turns game rules and mathematical decision-making into Playable Knowledge Objects (PKOs). Each object contains 6 layers: `answer`, `evidence`, `model`, `play`, `quiz`, `machine`.
 
 ## Core Documentation
-- [README](https://github.com/Igor-Zinin/game-codex/blob/main/README.md): Project overview, architecture, and running instructions.
-- [CONTRIBUTING](https://github.com/Igor-Zinin/game-codex/blob/main/CONTRIBUTING.md): Guidelines for adding new PKOs and submitting Pull Requests.
-- [PKO Specification Canon](https://github.com/Igor-Zinin/game-codex/blob/main/knowledge/pko/chess-en-passant-001.pko.json): Reference PKO implementation for En Passant.
+- [README](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/README.md): Project overview, architecture, and running instructions.
+- [CONTRIBUTING](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/CONTRIBUTING.md): Guidelines for adding new PKOs and submitting Pull Requests.
+- [PKO Specification Canon](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/knowledge/pko/chess-en-passant-001.pko.json): Reference PKO implementation for En Passant.
 
 ## Live Public Interactive Site
-- [Live PKO Inspector](https://igor-zinin.github.io/game-codex/docs/): Interactive web interface reading PKO objects directly at runtime.
+- [Live PKO Inspector](https://igor-zinin.github.io/axioma-xks-codex/docs/): Interactive web interface reading PKO objects directly at runtime.
 
 ## Machine Verification
 - Self-test runner: `node selftest.mjs`

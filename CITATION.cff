@@ -6,8 +6,8 @@ authors:
   - family-names: Zinin
     given-names: Igor
     orcid: "https://orcid.org/0000-0000-0000-0000"
-repository-code: "https://github.com/Igor-Zinin/game-codex"
-url: "https://igor-zinin.github.io/game-codex/docs/"
+repository-code: "https://github.com/Igor-Zinin/axioma-xks-codex"
+url: "https://igor-zinin.github.io/axioma-xks-codex/docs/"
 abstract: "Game Codex converts game mechanics into Playable Knowledge Objects (PKOs) — machine-verifiable, 6-layered executable knowledge capsules for human and AI decision-making benchmarks."
 keywords:
   - game-theory

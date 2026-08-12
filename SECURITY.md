@@ -14,7 +14,7 @@
 
 If you discover a security issue in Game Codex, report it privately:
 
-1. **GitHub Private Advisory** (preferred): Go to [Security → Advisories → New draft](https://github.com/Igor-Zinin/game-codex/security/advisories/new) and submit a private draft.
+1. **GitHub Private Advisory** (preferred): Go to [Security → Advisories → New draft](https://github.com/Igor-Zinin/axioma-xks-codex/security/advisories/new) and submit a private draft.
 2. **Email**: Contact the maintainer directly via GitHub profile.
 
 We aim to respond within **72 hours** and will coordinate a fix before any public disclosure.

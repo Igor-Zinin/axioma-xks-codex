@@ -22,7 +22,7 @@
       "reading_level": "intermediate"
     },
     "evidence": {
-      "ref": "https://raw.githubusercontent.com/wiki/Igor-Zinin/game-codex/PKO-Specification-Standard.md",
+      "ref": "https://raw.githubusercontent.com/wiki/Igor-Zinin/axioma-xks-codex/PKO-Specification-Standard.md",
       "section": "The 6 Mandatory Layers",
       "quote": "A **Playable Knowledge Object (PKO)** is a 6-layer machine-verifiable executable knowledge capsule.",
       "type": "specification"
