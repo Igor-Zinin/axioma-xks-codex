@@ -60,10 +60,13 @@ carrying a runnable criterion. The six are keys inside `layers`, not top-level f
 
 Two rules do the real work here. `evidence` must carry a reference that resolves *and* a quote
 that is verbatim present at it — the presence of a non-empty string is not evidence, and this
-project shipped a green test for a month on exactly that confusion. `machine` must carry a
-criterion someone can actually run; a criterion nobody can run is a promise wearing the
-clothes of a check. What "runnable" does **not** yet mean is set out under
-[Known gaps](#known-gaps) — v1 specifies no execution environment.
+project shipped a green test for a month on exactly that confusion. `machine` must carry
+`local_check`, a command satisfying the execution contract the schema now declares
+(`machine_execution_contract` in `data/axioma-xks-spine-v1.json`, added in 1.2.0): a `node`
+command, run from the repository root, no dependency, no network, exit 0 means the claim
+still holds. What that contract does **not** yet cover is set out under
+[Known gaps](#known-gaps) — it closes the gap for node commands inside this repository, not
+for an execution environment in general.
 
 **`module-passport`** — a capsule describing a living software module. Requires `title`,
 `version`, `lifecycle`, and `kind`; `components` and `tests` are optional manifests of the
@@ -190,11 +193,17 @@ Named here rather than left for a reader to find. A specification that hides its
 the thing this project keeps catching in other people's work and in its own. All six were
 raised by the first external review, and none is fixed in v1.
 
-**The `machine` layer has no execution environment.** No runtime, no parameter contract, no
-sandbox boundary, no output schema. A conforming reader can verify that a criterion is
-*present*, not run it unattended. Until that is specified, the claim that this format makes
-"still true" an automatically answerable question **is not earned** — a criterion here is
-something a human or a project's own CI runs.
+**The `machine` layer's execution environment is only partly specified.** Schema 1.2.0 adds
+`machine_execution_contract`: `local_check` is a `node` command, run from the repository root,
+with no dependency and no network, where exit 0 means the claim holds and nonzero means it does
+not — and `selftest.mjs` (`C-08`) now runs it for every capsule instead of checking that the
+field exists. That closes the gap for **this repository's own capsules**, read by someone
+willing to run node in this checkout. It does not specify a runtime for any other environment
+(shell, Python, a container, a remote endpoint), resource or time limits, a parameter-passing
+convention for criteria that need input, or how a reader who does not trust running an
+arbitrary script from a corpus it is auditing is supposed to get the same answer without
+executing untrusted code. The claim that this format makes "still true" automatically
+answerable is earned narrowly, not as a property of the format in general.
 
 **`evidence.ref` has no resolution protocol.** The spec does not say whether `ref` is a URL, a
 DOI, a git object, or a path, nor how to handle redirects, auth, paywalls, client-rendered

@@ -66,38 +66,53 @@ assert(typeof runAudit === "function",
 assert(existsSync(join(__dirname, "knowledge/pko")),
   "C-01 · knowledge/pko/ directory exists (PKO Canon)");
 
-// ── C-02: first PKO atom is valid JSON with all required layers ───────────────
+// PKO_PATH — точка входа страницы docs/index.html (var SRC), нужна отдельно
+// для C-05 ниже, где сверяется побайтовая копия именно этой капсулы.
 const PKO_PATH = join(__dirname, "knowledge/pko/chess-en-passant-001.pko.json");
-assert(existsSync(PKO_PATH), "C-02 · chess-en-passant-001.pko.json exists");
 
-let pko;
-try {
-  pko = JSON.parse(readFileSync(PKO_PATH, "utf-8"));
-  assert(true, "C-02 · chess PKO parses as valid JSON");
-} catch (e) {
-  assert(false, `C-02 · chess PKO parses as valid JSON (${e.message})`);
-}
+// pkoDir/pkoFiles используются и здесь, и в C-06/C-08 ниже — объявлены один раз.
+const pkoDir = join(__dirname, "knowledge/pko");
+const pkoFiles = readdirSync(pkoDir).filter((f) => f.endsWith(".json"));
 
-if (pko) {
-  const REQUIRED_LAYERS = ["answer", "evidence", "model", "play", "quiz", "machine"];
-  for (const layer of REQUIRED_LAYERS) {
-    assert(!!pko.layers?.[layer], `C-02 · chess PKO has layer "${layer}"`);
+// ── C-02: every PKO atom is valid JSON with all required layers ──────────────
+// До 12.08 здесь проверялась только chess-en-passant-001 — четвёртый за сутки
+// случай дефекта «сторож смотрит только на первый объект» (см. C-06, C-08 ниже
+// и запись в git log 2026-08-12 «слепое пятно закрыто»). Проверяются ВСЕ
+// капсулы в knowledge/pko/, а не первая.
+assert(pkoFiles.length > 0, "C-02 · at least one PKO exists in knowledge/pko/");
+
+const REQUIRED_LAYERS = ["answer", "evidence", "model", "play", "quiz", "machine"];
+for (const file of pkoFiles) {
+  const path = join(pkoDir, file);
+  let obj;
+  try {
+    obj = JSON.parse(readFileSync(path, "utf-8"));
+    assert(true, `C-02 · [${file}] parses as valid JSON`);
+  } catch (e) {
+    assert(false, `C-02 · [${file}] parses as valid JSON (${e.message})`);
+    continue;
   }
 
-  assert(!!pko.layers?.evidence?.ref,
-    "C-02 · evidence layer has a ref (not a bare claim)");
+  const id = obj.id || file;
 
-  assert(!!pko.layers?.machine?.acceptance_sql,
-    "C-02 · machine layer has acceptance_sql (machine-checkable criterion)");
+  for (const layer of REQUIRED_LAYERS) {
+    assert(!!obj.layers?.[layer], `C-02 · [${id}] has layer "${layer}"`);
+  }
 
-  assert(!!pko.layers?.machine?.local_check,
-    "C-02 · machine layer has a public local_check");
+  assert(!!obj.layers?.evidence?.ref,
+    `C-02 · [${id}] evidence layer has a ref (not a bare claim)`);
 
-  assert(pko.confidence === 1.0,
-    "C-02 · confidence is a number (not absent or string)");
+  assert(!!obj.layers?.machine?.acceptance_sql || !!obj.layers?.machine?.local_check,
+    `C-02 · [${id}] machine layer has at least one machine-checkable criterion`);
 
-  assert(!!pko.provenance?.claim?.source,
-    "C-02 · provenance.claim.source is present (knowledge has an author)");
+  assert(!!obj.layers?.machine?.local_check,
+    `C-02 · [${id}] machine layer has a public local_check`);
+
+  assert(typeof obj.confidence === "number",
+    `C-02 · [${id}] confidence is a number (not absent or string)`);
+
+  assert(!!obj.provenance?.claim?.source,
+    `C-02 · [${id}] provenance.claim.source is present (knowledge has an author)`);
 }
 
 // ── C-06: evidence ref actually resolves and the quote is really there ───────
@@ -117,8 +132,7 @@ if (pko) {
 // остался зелёным: 30 проверок, 0 пропущенных, при битой ссылке в публичном объекте.
 // Сторож, покрывающий не всё, молчит именно там, где должен кричать — тот же класс,
 // что и §8 «проверяй соседей, а не только цель правки».
-const pkoDir = join(__dirname, "knowledge/pko");
-const pkoFiles = readdirSync(pkoDir).filter((f) => f.endsWith(".json"));
+// pkoDir/pkoFiles объявлены выше, перед C-02, и переиспользуются здесь.
 assert(pkoFiles.length > 0, "C-06 · at least one PKO exists to be checked");
 
 for (const file of pkoFiles) {
@@ -272,6 +286,14 @@ assert(refResult.response_contract === contract.contract,
 // выписанным себе автором. Имена полей и словари читаются ИЗ СХЕМЫ, а не
 // повторяются здесь — иначе появится второе описание формата, ровно тот дефект,
 // за который уже дважды заплатили публично (см. C-07 и RESULTS.md).
+//
+// До 12.08 «C-08 ловит machine» означало «machine.local_check — непустая
+// строка». Внешняя вычитка это назвала прямо: ридер может проверить НАЛИЧИЕ
+// критерия, а не запустить его. С schema 1.2.0 (machine_execution_contract)
+// это больше не так — ниже local_check реально ВЫПОЛНЯЕТСЯ (execFileSync,
+// stdio: "pipe", таймаут), и код возврата решает GREEN/RED. Отсутствие
+// local_check — тоже RED: контракт требует его у каждой капсулы, это не
+// опциональное поле, о котором можно смолчать через SKIPPED.
 const spine = JSON.parse(readFileSync(join(__dirname, "docs/data/axioma-xks-spine-v1.json"), "utf8"));
 
 assert(existsSync(join(__dirname, "docs/AXIOMA-XKS.md")),
@@ -300,6 +322,36 @@ for (const file of pkoFiles) {
   const missingLayers = profile.required_layers.filter((l) => !obj.layers?.[l]);
   assert(missingLayers.length === 0,
     `C-08 · [${id}] has all six mandatory layers${missingLayers.length ? ` (missing: ${missingLayers.join(", ")})` : ""}`);
+
+  // machine.local_check не просто существует строкой — он ЗАПУСКАЕТСЯ, и код
+  // возврата 0 — единственное, что здесь считается «утверждение держится».
+  // До 12.08 здесь проверялось только наличие строки: спецификация обещала
+  // исполняемый критерий, а сторож проверял текст промиса, а не сам промис.
+  // Отсутствие local_check — RED, а не SKIPPED: контракт (machine_execution_contract,
+  // schema 1.2.0) требует его у каждой капсулы профиля knowledge-object, поэтому
+  // отсутствие — не «не проверено», а нарушение спецификации самой капсулой.
+  const localCheck = obj.layers?.machine?.local_check;
+  if (!localCheck || typeof localCheck !== "string") {
+    assert(false, `C-08 · [${id}] machine.local_check is present (spec requires it, not optional)`);
+  } else {
+    const parts = localCheck.trim().split(/\s+/);
+    const [cmd, ...args] = parts;
+    try {
+      execFileSync(cmd, args, { cwd: __dirname, stdio: "pipe", timeout: 30000 });
+      assert(true, `C-08 · [${id}] local_check ("${localCheck}") exits 0 — claim still holds`);
+    } catch (e) {
+      const detail = e.status !== undefined ? `exit ${e.status}` : e.message;
+      assert(false, `C-08 · [${id}] local_check ("${localCheck}") exits 0 — claim still holds (${detail})`);
+    }
+  }
+
+  // acceptance_sql остаётся опциональным полем (внешний критерий, честно
+  // помеченный как таковой) — его отсутствие не проваливает капсулу, но если
+  // он есть, обязан быть непустой строкой, а не заглушкой.
+  if (obj.layers?.machine?.acceptance_sql !== undefined) {
+    assert(typeof obj.layers.machine.acceptance_sql === "string" && obj.layers.machine.acceptance_sql.trim().length > 0,
+      `C-08 · [${id}] acceptance_sql, when present, is a non-empty string`);
+  }
 
   // Заявленная уверенность — число в 0..1, а не строка и не подразумеваемая
   // читателем из уверенного тона. Ровно за это правило формат и держат.

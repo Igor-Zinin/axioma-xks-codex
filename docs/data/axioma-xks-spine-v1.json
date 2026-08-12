@@ -1,8 +1,9 @@
 {
   "spec": "axioma-xks-spine",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "note": "The machine-readable half of AXIOMA-XKS.md. The prose document explains; this file decides. Validators, generators, and prompts MUST read their field names and vocabularies from here rather than restating them — a second statement of a contract is the defect this project has already paid for twice in public.",
   "changelog": {
+    "1.2.0": "2026-08-12, in response to the second external review pass (this repository's own selftest gate, C-08). The `machine` layer's `local_check` had a contract nobody wrote down: a reader could see a string and not know what running it meant, what a nonzero exit meant, or what environment was assumed. Added `machine_execution_contract`, defining `local_check` as a `node`-interpreted command, run from the repository root, with no network and no dependency outside this repository, whose exit code 0 means the capsule's claim still holds and whose nonzero exit means it does not. Rewrote `known_gaps.machine_execution` to say plainly that this closes the gap only for node commands inside this repository — not for an arbitrary execution environment, which remains open.",
     "1.1.0": "2026-08-12, in response to the first external review (Gemini 3.6 Flash, cold read). Added the required `profile` field: the previous version left a reader to guess which profile applied, and the project's own validator guessed `knowledge-object` for every capsule. Declared the internal structure of `provenance` and `decay`, which the validator was already enforcing while this file stayed silent about it — the same two-statements defect this spec exists to prevent, found inside the spec itself. Stated plainly that `kind` has no extension mechanism in v1.",
     "1.0.0": "2026-08-12, first publication."
   },
@@ -43,7 +44,7 @@
       "required_layers": ["answer", "evidence", "model", "play", "quiz", "machine"],
       "layer_rules": {
         "evidence": "MUST carry a resolvable `ref` and a `quote` that is actually present at that ref. Presence of a non-empty string is not evidence; reachability and verbatim match are.",
-        "machine": "MUST carry at least one criterion someone can run. See `known_gaps.machine_execution` — v1 does not specify an execution environment, so 'runnable' here means 'a human or CI can run it', not 'any conforming reader can run it automatically'."
+        "machine": "MUST carry `local_check`, a command satisfying `machine_execution_contract` below. `acceptance_sql` MAY additionally be present as an optional external check; it does not substitute for `local_check`, which is what any reader of this repository can actually run. See `known_gaps.machine_execution` — the contract below covers node commands run inside this repository, not an arbitrary execution environment."
       }
     },
     "module-passport": {
@@ -81,9 +82,22 @@
     "rationale": "A corpus that quietly revises itself cannot be cited, because a citation would point at whatever the text happens to say today. Retraction is what makes the record load-bearing."
   },
 
+  "machine_execution_contract": {
+    "description": "What running `layers.machine.local_check` means. Added in 1.2.0 because the field existed since v1.0 with no stated contract: a reader could see a string and not know what executing it meant, what environment it assumed, or what an exit code signified. This contract covers the `local_check` field only, and only for capsules published in this repository — it is not a claim about executing arbitrary criteria in an arbitrary environment. See `known_gaps.machine_execution` for what is still open.",
+    "field": "layers.machine.local_check",
+    "value": "A single shell command, given as a string.",
+    "interpreter": "The command MUST be a `node` invocation (e.g. `node scripts/check-foo.mjs`), run with the Node.js version declared in this repository's `package.json` `engines.node`. No other interpreter is part of this contract.",
+    "working_directory": "The command MUST be run with the repository root as the current working directory, so relative paths inside the command resolve the same way for every reader.",
+    "dependencies": "The command MUST run with zero dependencies outside this repository's own tracked files and the Node.js standard library. It MUST NOT require `npm install`, a network fetch, a database connection, or any credential.",
+    "network": "The command MUST NOT open a network connection. A criterion that needs the network belongs in `acceptance_sql` (or another external field), not in `local_check`.",
+    "exit_code": "Exit code 0 means the capsule's `claim` still holds. Any nonzero exit code means it does not — whether because the check failed, or because the command itself errored. A reader MUST NOT distinguish these two cases; both are 'not held' for the purposes of this contract.",
+    "scope": "The exit code is a statement about the capsule's claim, not about the health of this repository, its build, or its test suite. A `local_check` that happens to also exercise unrelated code is scoped too broadly and is a defect in the capsule, not a feature.",
+    "determinism": "Given the same repository state, the command MUST produce the same exit code on every run. A `local_check` that depends on wall-clock time, randomness, or external state that this repository does not track is not conformant."
+  },
+
   "known_gaps": {
     "note": "Named here rather than left for a reader to discover. A specification that hides its own holes is the thing this project keeps catching in other people's work and in its own.",
-    "machine_execution": "v1 does not define an execution environment for the `machine` layer: no runtime, no parameter contract, no sandbox boundary, no output schema. A conforming reader can therefore verify that a criterion is present, not run it unattended. Until that is specified, `machine` is a criterion a human or a project's own CI runs, and the claim that the format makes 'still true' automatically answerable is not yet earned.",
+    "machine_execution": "Partially closed in 1.2.0 by `machine_execution_contract`, and only that far. The contract defines `local_check` as a `node` command, run from the repository root, with no dependency and no network, where exit 0 means the claim holds and nonzero means it does not — and this repository's own selftest (C-08) now runs it rather than checking that the field is merely present. What remains open: the contract covers node commands inside THIS repository, not an arbitrary execution environment. It says nothing about a different runtime (shell, Python, a container image, a remote endpoint), about resource or time limits, about a parameter-passing convention for criteria that need input, or about how a reader outside this repository — one that does not have Node.js, or does not trust running an arbitrary script from a corpus it is auditing — is supposed to get the same answer without executing untrusted code. The claim that the format makes 'still true' automatically answerable is earned for this repository's own capsules, run by a reader willing to execute node in this checkout; it is not earned as a property of the format in general.",
     "evidence_resolution": "v1 does not specify what `ref` may be — URL, DOI, git object, file path — nor how to handle redirects, auth, paywalls, client-rendered pages, or an archival fallback when the source moves. The reference implementation resolves HTTP(S) and reports unreachable sources as unverified rather than broken, but that is one implementation's choice, not a rule of the format.",
     "integrity": "A capsule carries no digest or signature over its own content, so a reader cannot tell a capsule that was altered after publication from one that was not. Provenance names an author; it does not bind the bytes.",
     "kind_extension": "`kind` is closed and has no declared extension mechanism, unlike `lifecycle`. A corpus needing a new kind has no path that is not a fork.",

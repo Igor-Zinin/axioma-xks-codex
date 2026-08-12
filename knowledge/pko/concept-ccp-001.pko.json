@@ -57,7 +57,9 @@
       "explanation": "Слой `machine` содержит поле `acceptance_sql`, с помощью которого ИИ или БД могут автоматически и детерминированно проверить справедливость утверждения."
     },
     "machine": {
-      "acceptance_sql": "SELECT COUNT(*) = 6 FROM json_keys(pko.layers) WHERE key IN ('answer', 'evidence', 'model', 'play', 'quiz', 'machine')"
+      "local_check": "node scripts/check-concept-ccp.mjs",
+      "acceptance_sql": "SELECT COUNT(*) = 6 FROM json_keys(pko.layers) WHERE key IN ('answer', 'evidence', 'model', 'play', 'quiz', 'machine')",
+      "coverage_note": "local_check is the public reproducible check: it reads the required layer list for this capsule's profile from docs/data/axioma-xks-spine-v1.json and confirms every knowledge-object capsule in knowledge/pko/ declares all of them. acceptance_sql is an optional external check and requires BigQuery access this repository does not grant."
     }
   }
 }

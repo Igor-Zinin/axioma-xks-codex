@@ -89,10 +89,10 @@
       ]
     },
     "machine": {
-      "local_check": "npm run benchmark:chess",
+      "local_check": "node scripts/check-chess-en-passant.mjs",
       "acceptance_sql": "SELECT COUNT(*) > 0 AS passed FROM pko_runs WHERE pko_id = 'chess-en-passant-001' AND layer = 'play' AND outcome = 'success' AND run_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)",
       "selftest_assertion": "en-passant rule is formally defined with all 6 layers and authoritative evidence ref",
-      "coverage_note": "local_check is the public reproducible check. acceptance_sql is an optional external observatory log and requires pko_runs in BigQuery."
+      "coverage_note": "local_check runs an independent simulation of the en passant rule against this capsule's own play scenario and formal model (scripts/check-chess-en-passant.mjs) — it does not depend on Chess Benchmark v0.1, retired 2026-08-12 for a wrong answer key (see docs/CHESS-BENCHMARK-V0.1.md). acceptance_sql is an optional external observatory log and requires pko_runs in BigQuery."
     }
   }
 }
