@@ -1,0 +1,90 @@
+{
+  "model": "claude-opus-4-6",
+  "trial": 3,
+  "responses": {
+    "legality-white-ep": {
+      "move": "e5d6",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-black-ep": {
+      "move": "e4d3",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-white-illegal-forward": {
+      "move": "e5e6",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-black-illegal-forward": {
+      "move": "e4e3",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "state-white-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
+      "explanation": null,
+      "completed": true
+    },
+    "state-black-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": "8/8/8/8/8/3p4/8/8 w - - 0 2",
+      "explanation": null,
+      "completed": true
+    },
+    "tactics-white-ep": {
+      "move": "e5d6",
+      "legal": null,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "tactics-black-ep": {
+      "move": "e4d3",
+      "legal": null,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "explanation-white-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": null,
+      "explanation": "The white pawn on e5 can capture the black pawn on d5 en passant by moving to d6. En passant is a special capture that is only available on the very next move after the opponent's pawn advances two squares from its starting position. If white does not play the en passant capture on the next move, the opportunity is permanently lost.",
+      "completed": true
+    },
+    "explanation-black-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": null,
+      "explanation": "The black pawn on e4 can capture the white pawn on d4 en passant by moving to d3. This special capture must be executed on the very next move after the opponent's pawn makes a two-square advance from its starting rank. If black does not capture en passant on the next move, the right to do so is forfeited.",
+      "completed": true
+    },
+    "interactive-white-ep": {
+      "move": "e5d6",
+      "legal": null,
+      "state_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
+      "explanation": null,
+      "completed": true
+    },
+    "interactive-black-ep": {
+      "move": "e4d3",
+      "legal": null,
+      "state_fen": "8/8/8/8/8/3p4/8/8 w - - 0 2",
+      "explanation": null,
+      "completed": true
+    }
+  }
+}

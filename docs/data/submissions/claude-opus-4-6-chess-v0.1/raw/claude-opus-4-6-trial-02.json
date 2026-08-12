@@ -1,0 +1,90 @@
+{
+  "model": "claude-opus-4-6",
+  "trial": 2,
+  "responses": {
+    "legality-white-ep": {
+      "move": "e5d6",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-black-ep": {
+      "move": "e4d3",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-white-illegal-forward": {
+      "move": "e5e6",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "legality-black-illegal-forward": {
+      "move": "e4e3",
+      "legal": true,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "state-white-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
+      "explanation": null,
+      "completed": true
+    },
+    "state-black-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": "8/8/8/8/8/3p4/8/8 w - - 0 2",
+      "explanation": null,
+      "completed": true
+    },
+    "tactics-white-ep": {
+      "move": "e5d6",
+      "legal": null,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "tactics-black-ep": {
+      "move": "e4d3",
+      "legal": null,
+      "state_fen": null,
+      "explanation": null,
+      "completed": true
+    },
+    "explanation-white-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": null,
+      "explanation": "The white pawn on e5 can capture the black pawn that just advanced two squares by moving to d6. This en passant capture must be made on the next move immediately following the opponent's double pawn push, or the right to capture en passant is lost.",
+      "completed": true
+    },
+    "explanation-black-ep": {
+      "move": null,
+      "legal": null,
+      "state_fen": null,
+      "explanation": "The black pawn on e4 can capture the white pawn that just advanced two squares by moving to d3. This en passant capture must be executed on the next move immediately after the opponent's double pawn advance, or the opportunity is forfeited.",
+      "completed": true
+    },
+    "interactive-white-ep": {
+      "move": "e5d6",
+      "legal": null,
+      "state_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
+      "explanation": null,
+      "completed": true
+    },
+    "interactive-black-ep": {
+      "move": "e4d3",
+      "legal": null,
+      "state_fen": "8/8/8/8/8/3p4/8/8 w - - 0 2",
+      "explanation": null,
+      "completed": true
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "note": "Fill one entry per trial. UTC, ISO-8601, seconds precision. Do not back-date a guess: leave a field empty and say so rather than inventing a time.",
+  "model_snapshot": "Claude Opus 4.6 (Thinking)",
+  "provider": "Anthropic via Antigravity",
+  "timezone": "UTC+01:00",
+  "tools_allowed": [],
+  "internet_allowed": false,
+  "private_repository_access": false,
+  "trials": [
+    {
+      "trial": 1,
+      "started_utc": "2026-08-12T03:16:56Z",
+      "ended_utc": "2026-08-12T03:21:19Z",
+      "fresh_context": true,
+      "notes": "Failed with RESOURCE_EXHAUSTED (code 429) quota limit in Antigravity API before output completion."
+    },
+    {
+      "trial": 2,
+      "started_utc": "2026-08-12T03:16:56Z",
+      "ended_utc": "2026-08-12T03:21:22Z",
+      "fresh_context": true,
+      "notes": "Completed successfully. Raw JSON saved without edits."
+    },
+    {
+      "trial": 3,
+      "started_utc": "2026-08-12T03:16:56Z",
+      "ended_utc": "2026-08-12T03:21:03Z",
+      "fresh_context": true,
+      "notes": "Completed successfully. Raw JSON saved without edits."
+    }
+  ]
+}

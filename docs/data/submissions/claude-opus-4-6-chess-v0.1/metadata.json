@@ -1,0 +1,23 @@
+{
+  "model": "claude-opus-4-6",
+  "model_snapshot": "Claude Opus 4.6 (Thinking)",
+  "provider": "Anthropic via Antigravity",
+  "date_utc": "2026-08-12",
+  "timezone": "UTC+01:00",
+  "trials_completed": 2,
+  "trials_required": 3,
+  "fixtures": 12,
+  "tools_allowed": [],
+  "internet_allowed": false,
+  "private_repository_access": false,
+  "run_started_utc": "2026-08-12T03:16:56Z",
+  "run_ended_utc": "2026-08-12T03:21:22Z",
+  "trial_1_status": "Not produced. Trial 1 hit RESOURCE_EXHAUSTED (HTTP/code 429), an API quota limit in the Antigravity API, before output completion. No file was created for trial 1; it is not fabricated or reconstructed here, and this submission publishes only the two trials that actually completed.",
+  "raw_files": [
+    "raw/claude-opus-4-6-trial-02.json",
+    "raw/claude-opus-4-6-trial-03.json"
+  ],
+  "evidence_status": "finding_not_a_score",
+  "why_no_score": "Two reasons, either one sufficient on its own: (1) the protocol requires three independent trials and only two completed, so the trial-count floor is not met; (2) chess-v0.1's answer key is confirmed wrong on 6 of 12 fixtures (see docs/CHESS-BENCHMARK-V0.1.md#wrong-key-the-six-broken-fixtures), so a pass/fail score computed against that key would not measure the model's capability, only its agreement with a mistake. This submission is published as a finding about the benchmark, not as a model result.",
+  "raw_files_note": "Copied byte-for-byte from the source run folder; sha256 verified identical before and after copy. Not normalized, repaired, or re-run."
+}

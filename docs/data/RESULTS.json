@@ -7,7 +7,8 @@
       "game": "chess",
       "protocol": "chess-v0.1",
       "model": "reference-baseline",
-      "evidence_status": "submitted",
+      "evidence_status": "retired",
+      "retired_reason": "Six of twelve fixtures carry a wrong answer key: no fixture position contains a king, none is a legal chess position, and the hand-rolled move/legality logic used in place of an engine encoded two mistaken beliefs (en passant treated as mandatory; side-to-move and full-move counter not updated after a move). This 36/36 means the fixture set agrees with itself, not that the key is correct. See docs/CHESS-BENCHMARK-V0.1.md#wrong-key-the-six-broken-fixtures.",
       "trials": 3,
       "task_fixtures": 12,
       "passed": 36,
@@ -31,8 +32,9 @@
       "incomplete": 0,
       "pass_rate": 0.5,
       "consistency": 0.5,
-      "evidence_status": "withdrawn",
-      "note": "WITHDRAWN 2026-08-12. Scored against field names the evaluated model was never given; see evaluation.json. Kept for the record, not as a result. Raw trajectories unchanged.",
+      "evidence_status": "retired",
+      "note": "WITHDRAWN 2026-08-12 for scoring against field names the evaluated model was never given; see evaluation.json. RETIRED 2026-08-12 on top of that, independently: chess-v0.1 itself carries a wrong answer key on 6/12 fixtures, so any score against it is void regardless of the field-name defect. Kept for the record, not as a result. Raw trajectories unchanged.",
+      "retired_reason": "Doubly invalid: (1) evaluator 0.1.0 read field names the model was never given, a defect independent of the answer key; (2) chess-v0.1's answer key is wrong on 6 of 12 fixtures (no fixture position has a king; hand-rolled logic treated en passant as mandatory and failed to update side-to-move/full-move counter). Reason (2) is why the whole protocol, not just this row, is retired. See docs/CHESS-BENCHMARK-V0.1.md#wrong-key-the-six-broken-fixtures.",
       "evaluator_version": "chess-evaluator@0.1.0"
     },
     {
@@ -53,8 +55,22 @@
       "consistency": 1,
       "evaluator_version": "chess-evaluator@0.2.0",
       "response_contract": "chess-response-v0.1",
-      "evidence_status": "submitted",
-      "note": "Same raw trajectories, rescored against the contract the model was actually given. Supersedes the withdrawn 0.1.0 verdict. A perfect profile means chess v0.1 does not separate models: the protocol is marked saturated."
+      "evidence_status": "retired",
+      "retired_reason": "Six of twelve fixtures carry a wrong answer key (no fixture position has a king; hand-rolled move/legality logic treated en passant as mandatory and failed to update side-to-move/full-move counter after a move). This 36/36 means the submission agreed with the key's mistakes, not that it played correctly. See docs/CHESS-BENCHMARK-V0.1.md#wrong-key-the-six-broken-fixtures.",
+      "note": "Same raw trajectories, rescored against the contract the model was actually given. Supersedes the withdrawn 0.1.0 verdict on the field-name defect. RETIRED 2026-08-12: chess-v0.1's answer key itself is wrong on 6/12 fixtures, so this perfect profile means agreement with the key, not a capability result."
+    },
+    {
+      "id": "claude-opus-4-6-chess-v0.1-2026-08-12",
+      "path": "submissions/claude-opus-4-6-chess-v0.1/",
+      "raw_path": "submissions/claude-opus-4-6-chess-v0.1/raw/",
+      "game": "chess",
+      "protocol": "chess-v0.1",
+      "model": "Claude Opus 4.6 (Thinking)",
+      "provider": "Anthropic via Antigravity",
+      "trials": 2,
+      "task_fixtures": 12,
+      "evidence_status": "finding_not_a_score",
+      "note": "Two of three protocol-required trials completed (trial 1 hit RESOURCE_EXHAUSTED / HTTP 429 before producing output; not substituted or reconstructed). Both completed trials disagree with the chess-v0.1 answer key on the same 6 of 12 fixtures, 100% consistent across trials, and agree with the key on the other 6. No score is published: trial count is below the protocol's minimum of three, and scoring against a confirmed-wrong key would not mean anything regardless. See FINDING.md."
     }
   ]
 }

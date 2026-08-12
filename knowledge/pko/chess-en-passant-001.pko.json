@@ -49,7 +49,7 @@
         "mechanics": {
           "type": "chess-mini",
           "fen": "8/8/8/3pP3/8/8/8/8 w - d6 0 1",
-          "success_fen": "8/8/8/3P4/8/8/8/8 w - - 0 1",
+          "success_fen": "8/8/3P4/8/8/8/8/8 b - - 0 1",
           "instruction": "Белая пешка на e5. Чёрная только что сделала двойной ход d7-d5. Возьми её en passant! Нажми на пешку e5, затем на клетку d6.",
           "solution": "e5d6",
           "highlight_squares": ["e5", "d5", "d6"],
