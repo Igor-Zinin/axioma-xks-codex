@@ -39,6 +39,19 @@ flowchart LR
 
 ---
 
+## The format: Axioma-XKS
+
+A PKO is one profile of **Axioma-XKS**, a capsule format for knowledge that can be audited:
+every capsule carries its own claim, provenance, declared confidence, evidence, expiry, and a
+machine-checkable criterion — in the same file, not in a wiki page beside it.
+
+- **Specification:** [docs/AXIOMA-XKS.md](docs/AXIOMA-XKS.md)
+- **Machine half:** [docs/data/axioma-xks-spine-v1.json](docs/data/axioma-xks-spine-v1.json) — validators and prompts read field names from here, never restate them
+- **Conformance:** `node selftest.mjs` (check family `C-08`)
+
+The specification includes the list of errors the format caught in its own author's corpus,
+including two public retractions. That section is the argument; the rest is mechanics.
+
 ## What is a PKO?
 
 A **Playable Knowledge Object (PKO)** is the minimum unit of this factory.

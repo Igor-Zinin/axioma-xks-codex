@@ -1,0 +1,57 @@
+{
+  "spec": "axioma-xks-spine",
+  "version": "1.0.0",
+  "note": "The machine-readable half of AXIOMA-XKS.md. The prose document explains; this file decides. Validators, generators, and prompts MUST read their field names and vocabularies from here rather than restating them — a second statement of a contract is the defect this project has already paid for twice in public.",
+
+  "spine": {
+    "description": "Required in every capsule of every profile. A capsule missing any of these is not an Axioma-XKS capsule, whatever else it contains.",
+    "fields": {
+      "xks_version": "Format version this capsule is to be read by. Present so a reader can refuse a capsule it does not understand instead of guessing.",
+      "id": "Stable identifier, unique within the corpus. Never reused for a different subject.",
+      "claim": "The single assertion the capsule makes. One claim per capsule: a capsule asserting two things cannot be retracted by halves.",
+      "provenance": "Who or what asserted the claim, and when. An assertion without an author cannot be audited, only believed.",
+      "confidence": "Declared numeric confidence, 0..1. Declared, never inferred by the reader from tone or completeness.",
+      "decay": "When the claim must be re-checked, and what would trigger it. A claim with no expiry silently becomes a claim about the past."
+    },
+    "required": ["xks_version", "id", "claim", "provenance", "confidence", "decay"]
+  },
+
+  "profiles": {
+    "knowledge-object": {
+      "description": "A claim about the world, published for both humans and machines. Six layers, all mandatory: an answer for a person, evidence for an auditor, a model for reasoning, an interactive scene for a learner, a question for testing, and a machine-checkable criterion.",
+      "required": ["domain", "layers"],
+      "required_layers": ["answer", "evidence", "model", "play", "quiz", "machine"],
+      "layer_rules": {
+        "evidence": "MUST carry a resolvable `ref` and a `quote` that is actually present at that ref. Presence of a non-empty string is not evidence; reachability and verbatim match are.",
+        "machine": "MUST carry at least one executable criterion. A criterion no one can run is a promise, not a check."
+      }
+    },
+    "module-passport": {
+      "description": "A capsule describing a living software module: what it is, what it is made of, and what verifies it.",
+      "required": ["title", "version", "lifecycle", "kind"],
+      "field_rules": {
+        "version": "MUST equal the version the module reports to its users. Two version numbers for one module is the same defect class as two contracts.",
+        "components": "Paths the module is made of. Declared, so a scanner never has to guess.",
+        "tests": "Verifiers of this module. Their existence is checked; a listed test that does not exist is worse than no list."
+      }
+    }
+  },
+
+  "vocabularies": {
+    "note": "Closed for v1. A validator MUST reject a value outside its vocabulary. This is not strictness for its own sake: an open vocabulary makes conformance a matter of taste and two independent readers incomparable.",
+    "lifecycle": ["draft", "observed", "verified", "replicated", "consensus", "deprecated"],
+    "kind": ["project", "knowledge", "example", "template"]
+  },
+
+  "extension": {
+    "rule": "A vocabulary may be extended, but the extension MUST be declared in the capsule itself, never adopted silently.",
+    "mechanism": "`lifecycle_profile` names the profile whose vocabulary the capsule uses. Absence means the base profile above.",
+    "reader_obligation": "A reader that does not know a declared profile MUST report 'unknown vocabulary', not 'invalid capsule'. Otherwise an extension is indistinguishable from corruption, and the format punishes anyone who grows.",
+    "worked_example": "An adjacent corpus by the same author keeps a seventh lifecycle value, `historical`, because a withdrawn topic in a knowledge map must read differently from a deprecated module. Knowledge does not die the way software does. The format has to be able to express that fork, or the first thing an outside reader meets is a contradiction."
+  },
+
+  "retraction": {
+    "rule": "A published capsule is never edited to hide an error and never deleted. It is marked withdrawn, with the reason and a pointer to what supersedes it.",
+    "rationale": "A corpus that quietly revises itself cannot be cited, because a citation would point at whatever the text happens to say today. Retraction is what makes the record load-bearing."
+  }
+}

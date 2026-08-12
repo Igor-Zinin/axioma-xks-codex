@@ -6,6 +6,10 @@
 ## Overview
 Game Codex turns game rules and mathematical decision-making into Playable Knowledge Objects (PKOs). Each object contains 6 layers: `answer`, `evidence`, `model`, `play`, `quiz`, `machine`.
 
+## Format Specification (Axioma-XKS)
+- [Specification](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/docs/AXIOMA-XKS.md): Capsule format — claim, provenance, declared confidence, evidence, decay, machine criterion. Includes closed vocabularies with a declared-extension rule and a retraction policy.
+- [Machine schema](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/docs/data/axioma-xks-spine-v1.json): The authoritative half. Read field names and vocabularies from this file; do not restate them.
+
 ## Core Documentation
 - [README](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/README.md): Project overview, architecture, and running instructions.
 - [CONTRIBUTING](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/CONTRIBUTING.md): Guidelines for adding new PKOs and submitting Pull Requests.

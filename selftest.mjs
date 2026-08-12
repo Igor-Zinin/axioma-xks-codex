@@ -265,6 +265,58 @@ assert(refResult.metrics.passed === benchmark.tasks.length * refResult.trials,
 assert(refResult.response_contract === contract.contract,
   "C-07 · evaluator stamps the contract id it scored against into the result");
 
+// ── C-08: every published capsule satisfies the Axioma-XKS spine ─────────────
+// Спецификация без исполняемой проверки — это заявление, а не контракт, и первый
+// же посторонний это увидит: в репозитории, чей принцип C-05 требует машинного
+// критерия у каждого утверждения, документ без сторожа выглядит исключением,
+// выписанным себе автором. Имена полей и словари читаются ИЗ СХЕМЫ, а не
+// повторяются здесь — иначе появится второе описание формата, ровно тот дефект,
+// за который уже дважды заплатили публично (см. C-07 и RESULTS.md).
+const spine = JSON.parse(readFileSync(join(__dirname, "docs/data/axioma-xks-spine-v1.json"), "utf8"));
+
+assert(existsSync(join(__dirname, "docs/AXIOMA-XKS.md")),
+  "C-08 · the prose specification exists alongside its machine half");
+
+for (const file of pkoFiles) {
+  const obj = JSON.parse(readFileSync(join(pkoDir, file), "utf8"));
+  const id = obj.id || file;
+
+  const missingSpine = spine.spine.required.filter((f) => obj[f] === undefined || obj[f] === null);
+  assert(missingSpine.length === 0,
+    `C-08 · [${id}] carries every spine field${missingSpine.length ? ` (missing: ${missingSpine.join(", ")})` : ""}`);
+
+  // Профиль knowledge-object: шесть слоёв обязательны, и список берётся из схемы.
+  const profile = spine.profiles["knowledge-object"];
+  const missingReq = profile.required.filter((f) => obj[f] === undefined || obj[f] === null);
+  assert(missingReq.length === 0,
+    `C-08 · [${id}] satisfies the knowledge-object profile${missingReq.length ? ` (missing: ${missingReq.join(", ")})` : ""}`);
+
+  const missingLayers = profile.required_layers.filter((l) => !obj.layers?.[l]);
+  assert(missingLayers.length === 0,
+    `C-08 · [${id}] has all six mandatory layers${missingLayers.length ? ` (missing: ${missingLayers.join(", ")})` : ""}`);
+
+  // Заявленная уверенность — число в 0..1, а не строка и не подразумеваемая
+  // читателем из уверенного тона. Ровно за это правило формат и держат.
+  assert(typeof obj.confidence === "number" && obj.confidence >= 0 && obj.confidence <= 1,
+    `C-08 · [${id}] declares confidence as a number in 0..1 (got ${JSON.stringify(obj.confidence)})`);
+
+  // Срок годности обязан называть И когда перепроверить, И что это спровоцирует.
+  // Дата без триггера превращает протухание в календарную формальность.
+  assert(!!obj.decay?.check_after && !!obj.decay?.trigger,
+    `C-08 · [${id}] decay names both a re-check date and the trigger that would invalidate the claim`);
+
+  // Если капсула объявила расширение словаря — оно обязано быть объявлено полем,
+  // а не подразумеваться. Незнакомый профиль здесь не провал: правило схемы велит
+  // ридеру сказать «не знаю словарь», и SKIPPED — это и есть такое высказывание.
+  if (obj.lifecycle_profile !== undefined) {
+    skip(`C-08 · [${id}] lifecycle vocabulary (profile "${obj.lifecycle_profile}")`,
+      "капсула объявила чужой профиль словаря — по правилу расширения это «не знаю», а не «невалидна»");
+  } else if (obj.lifecycle !== undefined) {
+    assert(spine.vocabularies.lifecycle.includes(obj.lifecycle),
+      `C-08 · [${id}] lifecycle "${obj.lifecycle}" is inside the closed base vocabulary`);
+  }
+}
+
 // ── Print results ─────────────────────────────────────────────────────────────
 const LABEL = { pass: "GREEN  ", fail: "RED    ", skip: "SKIPPED" };
 for (const r of results) {
@@ -272,7 +324,7 @@ for (const r of results) {
   console.log(`  ${LABEL[r.status]} ${r.desc}${suffix}`);
 }
 
-console.log(`\nclaims: 5 · assertions passed: ${passed} · failed: ${failed} · skipped: ${skipped}\n`);
+console.log(`\nclaims: ${new Set(results.map(r=>r.desc.slice(0,4))).size} · assertions passed: ${passed} · failed: ${failed} · skipped: ${skipped}\n`);
 
 // process.exitCode (not process.exit()) — an abrupt exit() while the fetch
 // dispatcher in C-06 still has a keep-alive socket/timer open crashes on
