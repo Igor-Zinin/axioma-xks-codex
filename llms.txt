@@ -1,7 +1,19 @@
-# Game Codex (PKO Specification & AI Benchmark Suite)
+# axioma-xks-codex — knowledge that tells you when it has gone stale
 
 > Machine-readable index for LLM Agents and AI Assistants.
 > Version: 1.0.0 (2026)
+
+## Answers these questions
+- How do I tell whether a knowledge base or RAG corpus has silently gone stale?
+- What does knowledge provenance look like at the level of a single claim?
+- How do I record when a claim was last verified, by whom, against what source, and when it expires?
+- What are worked examples of staleness defects that passed a green test?
+- How should a corpus retract a published result without rewriting it?
+
+## Start here
+- [Silent staleness: four cases and what caught each](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/docs/SILENT-STALENESS.md): Four real defects, why each was green at the time, four cheap detectors. Requires no adoption of the format.
+- [RESULTS.md](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/docs/RESULTS.md): Two retracted results with reasons and untouched raw evidence; a retired benchmark whose answer key was wrong in half its fixtures.
+- [External review, unedited](https://github.com/Igor-Zinin/axioma-xks-codex/blob/main/docs/reviews/2026-08-12-gemini-3-6-flash.md): A cold read by a model from another vendor, published with the prompt it answered.
 
 ## Overview
 Game Codex turns game rules and mathematical decision-making into Playable Knowledge Objects (PKOs). Each object contains 6 layers: `answer`, `evidence`, `model`, `play`, `quiz`, `machine`.

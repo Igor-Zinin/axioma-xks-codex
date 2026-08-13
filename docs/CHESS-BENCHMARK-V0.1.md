@@ -81,15 +81,22 @@ Every task is run at least three times with the same protocol and independent se
 
 The submission records the model snapshot, provider, prompt, tools, protocol version, date, seed or sampling configuration, trial count, evaluator version, cost, latency, raw trajectory, and deterministic verdict.
 
-The deterministic evaluator is runnable without credentials:
+The deterministic evaluator was runnable without credentials:
 
 ```bash
-npm run benchmark:chess
+npm run benchmark:chess   # RETIRED — see below before running this
 ```
 
-The checked-in reference baseline is a protocol fixture, not a model result:
-3 independent trials × 12 fixtures = 36 deterministic verdicts. It proves that
-the evaluator and result shape work before any provider is measured.
+**This command still works and its output is meaningless.** It scores a submission against the
+answer key retired on 2026-08-12, so a perfect 36/36 means "agreed with the wrong answer in six
+of twelve fixtures". The command is left in place rather than deleted for the same reason the
+fixtures are: this file is a record of the error. Do not use it to evaluate anything.
+
+The checked-in reference baseline was a protocol fixture, not a model result:
+3 independent trials × 12 fixtures = 36 deterministic verdicts. It proved that the evaluator
+and result shape worked before any provider was measured — and, as it turned out, proved
+nothing about whether the key was right, because the baseline was built from that same key. A
+control that shares the assumption it is meant to test confirms nothing.
 
 ## Metrics
 

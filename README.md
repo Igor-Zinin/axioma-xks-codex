@@ -1,9 +1,50 @@
-# axioma-xks-codex — Playable Knowledge Factory
+# axioma-xks-codex — knowledge that tells you when it has gone stale
 
 [![selftest](https://github.com/Igor-Zinin/axioma-xks-codex/actions/workflows/selftest.yml/badge.svg)](https://github.com/Igor-Zinin/axioma-xks-codex/actions/workflows/selftest.yml)
 [![code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE-CODE)
 [![knowledge: CC BY 4.0](https://img.shields.io/badge/knowledge-CC%20BY%204.0-lightgrey)](LICENSE)
-[![live page](https://img.shields.io/badge/live-igor--zinin.github.io%2Fgame--codex-blue)](https://igor-zinin.github.io/axioma-xks-codex/docs/)
+[![live page](https://img.shields.io/badge/live-igor--zinin.github.io%2Faxioma--xks--codex-blue)](https://igor-zinin.github.io/axioma-xks-codex/docs/)
+
+## The failure this is about
+
+A knowledge base does not announce that it has gone out of date. Latency stays flat.
+Retrieval still returns something. Faithfulness and context-recall still score well. The
+system keeps answering fluently — right up to the moment it confidently states a policy that
+changed months ago.
+
+That failure is common and expensive. Across 143 enterprise RAG deployments, **73% hit a
+critical failure in their first quarter of production, and 41% of those failures were not
+caught by the standard evaluation suite**. Of the projects that die after a successful pilot,
+**about 60% die on data freshness, not on retrieval quality**.
+
+The reason it is hard to see is structural: a stale sentence and a true sentence are
+byte-for-byte indistinguishable. Nothing about the text changes when the world moves
+underneath it.
+
+## What is here
+
+Two things, and the second is the one worth your time.
+
+**A format.** [Axioma-XKS](docs/AXIOMA-XKS.md) — a knowledge capsule that carries, in the same
+file as the claim: who asserted it and when, a reference that resolves and a quote really
+present at it, a declared confidence, an expiry with the trigger that would invalidate it, and
+a criterion that runs and exits nonzero when the claim stops holding. None of that is novel
+alone. The point is that it lives *in the capsule* and not in a wiki page beside it.
+
+**A record of the format failing to save its own author.** Two published results retracted in
+one day, an external review that called a section of the specification self-congratulatory —
+published unedited, with its prompt — and six named gaps in the spec that are still open. If
+you are evaluating whether any of this is real, start with
+[what the format did *not* catch](docs/AXIOMA-XKS.md#what-this-format-did-not-catch-in-its-own-author)
+and with [RESULTS.md](docs/RESULTS.md), where a retired benchmark and its withdrawn scores are
+kept with the reasons attached.
+
+Start here if you want the short version:
+**[Silent staleness: four cases, and what actually caught each one](docs/SILENT-STALENESS.md)** —
+four defects from this repository, why each was green at the time, and the four cheap
+detectors that would have found them. No adoption required.
+
+Nothing here asks you to adopt the format to get value from it.
 
 ---
 
@@ -49,8 +90,8 @@ machine-checkable criterion — in the same file, not in a wiki page beside it.
 - **Machine half:** [docs/data/axioma-xks-spine-v1.json](docs/data/axioma-xks-spine-v1.json) — validators and prompts read field names from here, never restate them
 - **Conformance:** `node selftest.mjs` (check family `C-08`)
 
-The specification includes the list of errors the format caught in its own author's corpus,
-including two public retractions. That section is the argument; the rest is mechanics.
+The specification includes an accurate account of four errors the format **did not** catch in
+its own author's corpus, and what did. That section is the argument; the rest is mechanics.
 
 ## What is a PKO?
 
@@ -64,12 +105,13 @@ One game rule → one PKO → six representations of the same knowledge:
 | `model` | Formal preconditions and logic |
 | `play` | Browser-interactive mini-scene — position, task, move validation, and success state |
 | `quiz` | Questions to test understanding |
-| `machine` | `acceptance_sql` — machine-checkable criterion |
+| `machine` | `local_check` — a command that runs and exits nonzero when the claim stops holding; `acceptance_sql` optional |
 
 ```bash
-node selftest.mjs   # verifies structure + all PKOs
-npm run test:benchmark   # evaluator accepts a baseline and rejects an illegal move
-npm run benchmark:chess  # deterministic Chess v0.1 reference run
+node selftest.mjs   # verifies structure, evidence, and runs every capsule's own criterion
+
+# Chess v0.1 is RETIRED: six of its twelve fixtures had a wrong answer key.
+# It is kept as a record of the error, not as something to run. See docs/RESULTS.md.
 ```
 
 Zero runtime dependencies and no database is required for the public check. Network
@@ -113,7 +155,7 @@ docs/
 scripts/
   sync-docs.mjs    ← refreshes docs/data/ from the canon
 
-selftest.mjs       ← C-01…C-05: every claim has a check
+selftest.mjs       ← C-01…C-08: every claim has a check that runs
 LICENSE            ← CC BY 4.0 — knowledge atoms, schemas, docs
 LICENSE-CODE       ← MIT — code
 ```
