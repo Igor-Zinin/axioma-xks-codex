@@ -1,13 +1,13 @@
 {
   "spec": "axioma-xks-spine",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "note": "The machine-readable half of AXIOMA-XKS.md. The prose document explains; this file decides. Validators, generators, and prompts MUST read their field names and vocabularies from here rather than restating them — a second statement of a contract is the defect this project has already paid for twice in public.",
   "changelog": {
     "1.2.0": "2026-08-12, in response to the second external review pass (this repository's own selftest gate, C-08). The `machine` layer's `local_check` had a contract nobody wrote down: a reader could see a string and not know what running it meant, what a nonzero exit meant, or what environment was assumed. Added `machine_execution_contract`, defining `local_check` as a `node`-interpreted command, run from the repository root, with no network and no dependency outside this repository, whose exit code 0 means the capsule's claim still holds and whose nonzero exit means it does not. Rewrote `known_gaps.machine_execution` to say plainly that this closes the gap only for node commands inside this repository — not for an arbitrary execution environment, which remains open.",
     "1.1.0": "2026-08-12, in response to the first external review (Gemini 3.6 Flash, cold read). Added the required `profile` field: the previous version left a reader to guess which profile applied, and the project's own validator guessed `knowledge-object` for every capsule. Declared the internal structure of `provenance` and `decay`, which the validator was already enforcing while this file stayed silent about it — the same two-statements defect this spec exists to prevent, found inside the spec itself. Stated plainly that `kind` has no extension mechanism in v1.",
-    "1.0.0": "2026-08-12, first publication."
+    "1.0.0": "2026-08-12, first publication.",
+    "1.3.0": "2026-08-13, after reading the session where the neighbouring corpus was blocked. Vocabularies now belong to PROFILES, not to the format. The published spec named two closed vocabularies (`lifecycle`, `kind`) while the private contract it was derived from names three — the third, `layer` (core/face/vault), was dropped in publication and its absence went unnoticed. That omission was not bookkeeping: an adjacent knowledge corpus by the same author has been blocked since 2026-08-02 precisely because it has no code modules and nothing to put in that enum, and the published spec gave it no way to say so. Added the `knowledge-corpus` profile with its own `layer` vocabulary, moved `layer` under module-passport where it belongs, and made the extension rule apply to any profile-scoped vocabulary rather than to `lifecycle` alone."
   },
-
   "spine": {
     "description": "Required in every capsule of every profile. A capsule missing any of these is not an Axioma-XKS capsule, whatever else it contains.",
     "fields": {
@@ -19,29 +19,54 @@
       "confidence": "Declared numeric confidence, 0..1. Declared, never inferred by the reader from tone or completeness. This is the author's stated belief, not a calibrated probability, and it must not be read as one.",
       "decay": "When the claim must be re-checked, and what would trigger it. A claim with no expiry silently becomes a claim about the past."
     },
-    "required": ["xks_version", "id", "profile", "claim", "provenance", "confidence", "decay"],
+    "required": [
+      "xks_version",
+      "id",
+      "profile",
+      "claim",
+      "provenance",
+      "confidence",
+      "decay"
+    ],
     "substructure": {
       "provenance": {
-        "required": ["claim"],
+        "required": [
+          "claim"
+        ],
         "claim": {
-          "required": ["source", "timestamp"],
+          "required": [
+            "source",
+            "timestamp"
+          ],
           "source": "Free text naming who or what asserted it, precisely enough for a reader to find them.",
           "timestamp": "ISO date the assertion was made."
         }
       },
       "decay": {
-        "required": ["check_after", "trigger"],
+        "required": [
+          "check_after",
+          "trigger"
+        ],
         "check_after": "ISO date after which the claim must be re-checked whether or not anything is known to have changed.",
         "trigger": "The event that would invalidate the claim before that date. A date without a trigger turns expiry into a calendar formality."
       }
     }
   },
-
   "profiles": {
     "knowledge-object": {
       "description": "A claim about the world, published for both humans and machines. Six layers, all mandatory, nested under a single `layers` object: an answer for a person, evidence for an auditor, a model for reasoning, an interactive scene for a learner, a question for testing, and a machine-checkable criterion.",
-      "required": ["domain", "layers"],
-      "required_layers": ["answer", "evidence", "model", "play", "quiz", "machine"],
+      "required": [
+        "domain",
+        "layers"
+      ],
+      "required_layers": [
+        "answer",
+        "evidence",
+        "model",
+        "play",
+        "quiz",
+        "machine"
+      ],
       "layer_rules": {
         "evidence": "MUST carry a resolvable `ref` and a `quote` that is actually present at that ref. Presence of a non-empty string is not evidence; reachability and verbatim match are.",
         "machine": "MUST carry `local_check`, a command satisfying `machine_execution_contract` below. `acceptance_sql` MAY additionally be present as an optional external check; it does not substitute for `local_check`, which is what any reader of this repository can actually run. See `known_gaps.machine_execution` — the contract below covers node commands run inside this repository, not an arbitrary execution environment."
@@ -49,7 +74,12 @@
     },
     "module-passport": {
       "description": "A capsule describing a living software module: what it is, what it is made of, and what verifies it.",
-      "required": ["title", "version", "lifecycle", "kind"],
+      "required": [
+        "title",
+        "version",
+        "lifecycle",
+        "kind"
+      ],
       "field_rules": {
         "title": "Human-readable name of the module.",
         "version": "MUST equal the version the module reports to its users. Two version numbers for one module is the same defect class as two contracts. Distinct from `xks_version`, which versions the capsule format.",
@@ -58,30 +88,70 @@
         "components": "Optional. Paths the module is made of, declared so a scanner never has to guess.",
         "tests": "Optional. Verifiers of this module. Their existence is checked; a listed test that does not exist is worse than no list."
       }
+    },
+    "knowledge-corpus": {
+      "description": "A capsule describing a body of knowledge rather than a running module: a domain, a topic within it, a source it draws on, or a method it applies. Added because the module-passport profile could not express a corpus that has no code.",
+      "required": [
+        "title",
+        "lifecycle",
+        "layer"
+      ],
+      "field_rules": {
+        "layer": "One value from this profile's `layer` vocabulary — not from module-passport's.",
+        "lifecycle": "From the shared vocabulary, or from a profile declared in `lifecycle_profile`. A worked case: an adjacent corpus keeps a seventh value `historical` for a topic withdrawn from publication, which must read differently from a deprecated module."
+      }
     }
   },
-
   "vocabularies": {
-    "note": "Closed for v1. A validator MUST reject a value outside its vocabulary. This is not strictness for its own sake: an open vocabulary makes conformance a matter of taste and two independent readers incomparable.",
-    "lifecycle": ["draft", "observed", "verified", "replicated", "consensus", "deprecated"],
-    "kind": ["project", "knowledge", "example", "template"]
+    "note": "Vocabularies are scoped to a PROFILE, not to the format. A profile declares which vocabularies it closes and what values they admit; a validator rejects a value outside the vocabulary of the capsule's declared profile. Scoping them this way is not a refinement — it is the fix for a real block. Two corpora by the same author diverged systematically, not once: one describes software modules, the other describes knowledge, and knowledge neither lives in `core/face/vault` nor dies the way code does.",
+    "shared": {
+      "lifecycle": [
+        "draft",
+        "observed",
+        "verified",
+        "replicated",
+        "consensus",
+        "deprecated"
+      ]
+    },
+    "by_profile": {
+      "module-passport": {
+        "kind": [
+          "project",
+          "knowledge",
+          "example",
+          "template"
+        ],
+        "layer": [
+          "core",
+          "face",
+          "vault"
+        ]
+      },
+      "knowledge-corpus": {
+        "layer": [
+          "domain",
+          "topic",
+          "source",
+          "method"
+        ],
+        "note": "Declared here so a corpus of knowledge is not forced to describe itself in the vocabulary of a codebase."
+      }
+    }
   },
-
   "extension": {
     "rule": "A vocabulary may be extended, but the extension MUST be declared in the capsule itself, never adopted silently.",
     "mechanism": "`lifecycle_profile` names the profile whose vocabulary the capsule uses. Absence means the base profile above.",
-    "scope": "v1 provides an extension mechanism for `lifecycle` ONLY. `kind` is closed with no extension path, and adding one is deferred rather than forgotten — see `known_gaps.kind_extension`.",
+    "scope": "The mechanism applies to any profile-scoped vocabulary, named by `<vocabulary>_profile` — `lifecycle_profile` for lifecycle, `layer_profile` for layer, and so on. Before 1.3.0 only `lifecycle` could be extended, which left a corpus needing a different `layer` with no path but a fork.",
     "reader_obligation": "A reader that does not know a declared profile MUST report 'unknown vocabulary', not 'invalid capsule'. Otherwise an extension is indistinguishable from corruption, and the format punishes anyone who grows.",
     "conformance_of_unknown_vocabulary": "The capsule is conformant to the spine and to its profile's structural rules; only the single field governed by the unknown vocabulary is unverified. A validator MUST report it as a third outcome distinct from both pass and fail — the same three-state discipline the reference implementation uses for skipped network checks — and MUST NOT let a capsule reach 'fully verified' while any such field is outstanding.",
     "worked_example": "An adjacent corpus by the same author keeps a seventh lifecycle value, `historical`, because a withdrawn topic in a knowledge map must read differently from a deprecated module. Knowledge does not die the way software does. The format has to be able to express that fork, or the first thing an outside reader meets is a contradiction."
   },
-
   "retraction": {
     "rule": "A published capsule is never edited to hide an error and never deleted. It is marked withdrawn, with the reason and a pointer to what supersedes it.",
     "mechanism": "Set `evidence_status` to `withdrawn` and add a `withdrawn` object carrying `date`, `reason`, and `superseded_by`. The claim, the evidence, and the original identifier stay exactly as published.",
     "rationale": "A corpus that quietly revises itself cannot be cited, because a citation would point at whatever the text happens to say today. Retraction is what makes the record load-bearing."
   },
-
   "machine_execution_contract": {
     "description": "What running `layers.machine.local_check` means. Added in 1.2.0 because the field existed since v1.0 with no stated contract: a reader could see a string and not know what executing it meant, what environment it assumed, or what an exit code signified. This contract covers the `local_check` field only, and only for capsules published in this repository — it is not a claim about executing arbitrary criteria in an arbitrary environment. See `known_gaps.machine_execution` for what is still open.",
     "field": "layers.machine.local_check",
@@ -94,14 +164,13 @@
     "scope": "The exit code is a statement about the capsule's claim, not about the health of this repository, its build, or its test suite. A `local_check` that happens to also exercise unrelated code is scoped too broadly and is a defect in the capsule, not a feature.",
     "determinism": "Given the same repository state, the command MUST produce the same exit code on every run. A `local_check` that depends on wall-clock time, randomness, or external state that this repository does not track is not conformant."
   },
-
   "known_gaps": {
     "note": "Named here rather than left for a reader to discover. A specification that hides its own holes is the thing this project keeps catching in other people's work and in its own.",
     "machine_execution": "Partially closed in 1.2.0 by `machine_execution_contract`, and only that far. The contract defines `local_check` as a `node` command, run from the repository root, with no dependency and no network, where exit 0 means the claim holds and nonzero means it does not — and this repository's own selftest (C-08) now runs it rather than checking that the field is merely present. What remains open: the contract covers node commands inside THIS repository, not an arbitrary execution environment. It says nothing about a different runtime (shell, Python, a container image, a remote endpoint), about resource or time limits, about a parameter-passing convention for criteria that need input, or about how a reader outside this repository — one that does not have Node.js, or does not trust running an arbitrary script from a corpus it is auditing — is supposed to get the same answer without executing untrusted code. The claim that the format makes 'still true' automatically answerable is earned for this repository's own capsules, run by a reader willing to execute node in this checkout; it is not earned as a property of the format in general.",
     "evidence_resolution": "v1 does not specify what `ref` may be — URL, DOI, git object, file path — nor how to handle redirects, auth, paywalls, client-rendered pages, or an archival fallback when the source moves. The reference implementation resolves HTTP(S) and reports unreachable sources as unverified rather than broken, but that is one implementation's choice, not a rule of the format.",
     "integrity": "A capsule carries no digest or signature over its own content, so a reader cannot tell a capsule that was altered after publication from one that was not. Provenance names an author; it does not bind the bytes.",
-    "kind_extension": "`kind` is closed and has no declared extension mechanism, unlike `lifecycle`. A corpus needing a new kind has no path that is not a fork.",
     "schema_form": "This file is a description with normative prose inside it, not a JSON Schema. It cannot be handed to an off-the-shelf validator, so every implementation writes its own reader.",
-    "domain_coupling": "The `knowledge-object` profile makes `play` and `quiz` mandatory, which couples a general knowledge format to teaching. Knowledge that nobody needs to practise — a dataset, an operational fact — does not fit the profile without inventing empty layers, and inventing empty layers to satisfy a schema is exactly the failure this project calls a stub."
+    "domain_coupling": "The `knowledge-object` profile makes `play` and `quiz` mandatory, which couples a general knowledge format to teaching. Knowledge that nobody needs to practise — a dataset, an operational fact — does not fit the profile without inventing empty layers, and inventing empty layers to satisfy a schema is exactly the failure this project calls a stub.",
+    "vocabulary_authority": "Nothing yet says who may declare a new profile or where the declaration is published. Two corpora that each invent a `knowledge-corpus` profile with different vocabularies would both be conformant and mutually unreadable — the exact incomparability closed vocabularies exist to prevent, displaced one level up rather than solved."
   }
 }

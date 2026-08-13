@@ -368,15 +368,32 @@ for (const file of pkoFiles) {
       `C-08 · [${id}] ${field} carries its declared sub-fields${missing.length ? ` (missing: ${missing.join(", ")})` : ""}`);
   }
 
-  // Если капсула объявила расширение словаря — оно обязано быть объявлено полем,
-  // а не подразумеваться. Незнакомый профиль здесь не провал: правило схемы велит
-  // ридеру сказать «не знаю словарь», и SKIPPED — это и есть такое высказывание.
-  if (obj.lifecycle_profile !== undefined) {
-    skip(`C-08 · [${id}] lifecycle vocabulary (profile "${obj.lifecycle_profile}")`,
-      "капсула объявила чужой профиль словаря — по правилу расширения это «не знаю», а не «невалидна»");
-  } else if (obj.lifecycle !== undefined) {
-    assert(spine.vocabularies.lifecycle.includes(obj.lifecycle),
-      `C-08 · [${id}] lifecycle "${obj.lifecycle}" is inside the closed base vocabulary`);
+  // Словари с 1.3.0 принадлежат ПРОФИЛЮ, а не формату: `layer` у паспорта модуля
+  // и у корпуса знаний — разные словари, и это не придирка, а причина, по которой
+  // соседний корпус стоял заблокированным с 02.08.
+  //
+  // Проверка обходит все словари, объявленные для профиля капсулы, плюс общие.
+  // Раньше здесь читалось `spine.vocabularies.lifecycle` — путь, которого после
+  // 1.3.0 не существует. Прогон при этом остался зелёным, потому что ни у одной
+  // капсулы нет поля `lifecycle`: ветка просто не исполнялась. Сторож был мёртвым
+  // кодом, который упал бы на первой же капсуле с этим полем. Тот же класс, что
+  // «сторож смотрит только на первый объект», только злее — здесь он не смотрел
+  // ни на один и всё равно докладывал зелёным.
+  const vocabs = {
+    ...(spine.vocabularies.shared || {}),
+    ...((spine.vocabularies.by_profile || {})[obj.profile] || {}),
+  };
+  for (const [name, allowed] of Object.entries(vocabs)) {
+    if (!Array.isArray(allowed)) continue;           // `note` и прочая проза — не словарь
+    const declared = obj[`${name}_profile`];
+    if (declared !== undefined) {
+      // Правило расширения: незнакомый профиль словаря — это «не знаю», а не «невалидна».
+      skip(`C-08 · [${id}] ${name} vocabulary (declared profile "${declared}")`,
+        "капсула объявила чужой профиль словаря — по правилу расширения это «не знаю», а не провал");
+    } else if (obj[name] !== undefined) {
+      assert(allowed.includes(obj[name]),
+        `C-08 · [${id}] ${name} "${obj[name]}" is inside the closed vocabulary of profile "${obj.profile}"`);
+    }
   }
 }
 

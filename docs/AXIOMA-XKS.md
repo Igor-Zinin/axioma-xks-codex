@@ -76,7 +76,19 @@ contracts — and it is a different field from `xks_version`, which versions the
 
 ## Closed vocabularies, declared extensions
 
-`lifecycle` and `kind` are closed in v1. A validator rejects a value outside the vocabulary.
+**Vocabularies belong to a profile, not to the format.** A profile declares which vocabularies
+it closes and what values they admit; a validator rejects a value outside the vocabulary of the
+capsule's *declared* profile. `lifecycle` is shared across profiles. `kind` and `layer` belong
+to `module-passport`; `knowledge-corpus` has its own `layer`.
+
+That scoping is a fix, not a refinement, and it was paid for. The first published version of
+this document named two closed vocabularies while the private contract it was derived from
+names three — `layer`, with the values `core / face / vault`, was dropped in publication and
+nobody noticed for a day. Meanwhile an adjacent corpus by the same author had been blocked
+since 2026-08-02 for exactly that reason: it is a body of knowledge, it has no code modules,
+it has nothing to put in that enum, and the published spec gave it no way to say so. A format
+that forces a corpus to describe itself in the vocabulary of a codebase is telling it to lie
+or to fork.
 
 This is not strictness for its own sake. An open vocabulary makes conformance a matter of
 taste, and two independent readers of the same corpus stop being comparable — which destroys
@@ -96,9 +108,9 @@ verified" while it stands. Two outcomes cannot carry three states: collapse it i
 and extension dies, collapse it into success and a hallucinated profile name walks straight
 through validation.
 
-The mechanism covers `lifecycle` **only**. `kind` is closed with no extension path in v1 —
-a corpus needing a new kind has to fork. That is a gap, not a design choice, and it is listed
-as one below.
+The mechanism covers **any profile-scoped vocabulary**, named `<vocabulary>_profile` —
+`lifecycle_profile`, `layer_profile`, and so on. Until 1.3.0 only `lifecycle` could be
+extended, which left a corpus needing a different `layer` with no path but a fork.
 
 The worked example is real, not hypothetical. An adjacent corpus by the same author keeps a
 seventh lifecycle value, `historical`, because a withdrawn topic in a knowledge map has to
@@ -215,8 +227,11 @@ not a rule of the format.
 reader cannot distinguish a capsule altered after publication from one that was not.
 Provenance names an author; it does not bind the bytes.
 
-**`kind` cannot be extended.** `lifecycle` has a declared extension path and `kind` has none.
-A corpus needing a new kind has to fork.
+**Nobody is named as the authority over profiles.** Nothing says who may declare a new profile
+or where the declaration is published. Two corpora that each invent a `knowledge-corpus`
+profile with different vocabularies would both be conformant and mutually unreadable — which is
+the exact incomparability that closed vocabularies exist to prevent, displaced one level up
+rather than solved.
 
 **This schema is not a schema.** `axioma-xks-spine-v1.json` is a description with normative
 prose inside it, not JSON Schema. It cannot be handed to an off-the-shelf validator, so every
