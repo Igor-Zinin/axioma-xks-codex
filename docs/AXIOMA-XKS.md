@@ -174,36 +174,26 @@ checking. It removes the excuse that there was nothing to check.
 Two of these errors were found only because a **different model** disagreed, which is worth
 more than any field in the schema — and is exactly how this section came to be rewritten.
 
-**A benchmark answer key that was wrong in half its fixtures.** Six of twelve chess fixtures
-asserted the wrong answer. The root cause was structural: none of the positions contained a
-king, so none of them were legal chess positions and no engine would load one. Hand-written
-move logic stood in for an engine, and reproduced its author's own misunderstanding of two
-rules. The result was a benchmark that *punished knowledge* — a model that knew the rules
-scored lower. See [the retirement notice](CHESS-BENCHMARK-V0.1.md) and
-[the finding](data/submissions/claude-opus-4-6-chess-v0.1/FINDING.md).
-
-**A published result that understated another vendor's model by half.** The prompt handed to
-an evaluated model specified one response shape; the evaluator read another. The model complied
-perfectly and was published at 18/36 with the failure attributed to it. Two statements of one
-contract, and nothing comparing them. See [RESULTS.md](RESULTS.md).
-
-**One chess position recorded three times, three different ways.** The interactive scene of the
-flagship capsule placed a pawn on the wrong square while the sentence beside it named the right
-one, and the benchmark's expectation disagreed with both.
-
-**A citation stitched from three editions.** A quote from the 2023 rules, an article number
-from 2009, and a link to the 2009 PDF — passing a green test, because the test checked that the
-field was non-empty rather than that the quote was there.
-
-Every one of these is exactly what the six spine fields exist to make visible: a claim whose
-evidence nobody followed, a confidence nobody declared, an expiry nobody set. The format did not
-prevent them. It made them findable, and it required saying so out loud afterwards.
+> **A note on this section's own history, left here on purpose.** For a day, this document
+> carried the rewrite above *and the superseded version below it*, both intact — the honest
+> account and the flattering one, in the same section, contradicting each other. One said not
+> one error was caught by the format; the other closed with "it made them findable." A reader
+> got two answers to one question and no way to tell which was current. Nobody noticed while
+> reading the file, because nobody had both halves on screen at once — the same failure mode
+> [documented four times over](SILENT-STALENESS.md) elsewhere in this repository, occurring in
+> the paragraph that documents it. It was found on 2026-08-15 by an agent asked to inventory
+> this corpus, not by a person reading the prose and not by any check in `selftest.mjs`.
+> The duplicate is deleted rather than reconciled: a superseded statement kept "for context"
+> is just a second statement, and this document's whole argument is that a second statement
+> nothing compares is how corpora go quietly wrong.
 
 ## Known gaps
 
 Named here rather than left for a reader to find. A specification that hides its own holes is
 the thing this project keeps catching in other people's work and in its own. All six were
-raised by the first external review, and none is fixed in v1.
+raised by the first external review. None is closed in general; the first is closed narrowly,
+for this repository's own capsules only, by schema 1.2.0 — and its entry says where that
+narrowness begins and ends rather than counting it as fixed.
 
 **The `machine` layer's execution environment is only partly specified.** Schema 1.2.0 adds
 `machine_execution_contract`: `local_check` is a `node` command, run from the repository root,
