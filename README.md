@@ -40,11 +40,55 @@ and with [RESULTS.md](docs/RESULTS.md), where a retired benchmark and its withdr
 kept with the reasons attached.
 
 Start here if you want the short version:
-**[Silent staleness: four cases, and what actually caught each one](docs/SILENT-STALENESS.md)** —
-four defects from this repository, why each was green at the time, and the four cheap
+**[Silent staleness: five cases, and what actually caught each one](docs/SILENT-STALENESS.md)** —
+five defects from this repository, why each was green at the time, and the four cheap
 detectors that would have found them. No adoption required.
 
 Nothing here asks you to adopt the format to get value from it.
+
+## What the record is evidence *of*
+
+The retractions are not confessions attached to the interesting part. They are the interesting
+part, and they are collected deliberately, because together they answer a question this project
+cares about more than any benchmark score: **when a verdict about a claim is wrong, what was it
+that noticed?**
+
+Every case in this repository has a named finder. Counted, the finders fall out like this:
+
+| What was wrong | What actually caught it | Category |
+|---|---|---|
+| Benchmark key wrong in 6 of 12 fixtures | A second vendor's model disagreeing, twice | disagreement |
+| Another vendor's model published at half its score | A person reading two files side by side | disagreement |
+| A specification section flattering its author | An external reviewer with no stake in it | disagreement |
+| A closed vocabulary silently lost in publication | A second corpus that could not use the format | disagreement |
+| A specification stating one thing twice, contradicting itself | An agent inventorying the corpus with no expectation of it | disagreement |
+| A citation stitched from three editions | A test that fetches the source and matches the quote | machine check |
+| A quote that existed nowhere, in a capsule about capsules | The same test, after its coverage was widened past file one | machine check |
+| One position recorded three ways | Investigating something else entirely | accident |
+
+Five by disagreement, two by a machine check, one by accident. **Zero by careful reading**, and
+zero by the capsule format itself. That distribution is the finding, and it is the reason this
+repository publishes its failures with the finder attached rather than a leaderboard position:
+a score tells you where a system landed, and tells you nothing about whether the judge was
+right. These eight cases are a small dataset about the judge.
+
+Two consequences follow, and both are load-bearing here:
+
+**A control built by the party it checks confirms nothing.** The chess reference run scored a
+clean 36/36 against a key that was wrong in half its fixtures, because the run and the key had
+the same author. Agreement between a system and a gold set that share a parent is not evidence
+of correctness; it is evidence of a shared assumption.
+
+**A second reader outranks a better checklist.** Of the eight, the ones caught by disagreement
+were caught by a party who did not share the author's assumptions — another vendor's model, a
+cold reviewer, an agent with no prior reading of the file. Adding assertions to `selftest.mjs`
+did not find any of the five; it now runs 78 of them, and none of them reads prose for
+self-contradiction.
+
+This is also why the specification's [known gaps](docs/AXIOMA-XKS.md#known-gaps) are printed
+rather than filed. A gap a reader finds for themselves costs the author their credibility. A
+gap the author printed first costs nothing and buys the only thing this corpus is actually
+accumulating.
 
 ---
 
