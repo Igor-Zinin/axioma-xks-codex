@@ -1,4 +1,4 @@
-# Silent staleness: four cases, and what actually caught each one
+# Silent staleness: five cases, and what actually caught each one
 
 > A working note, not a product page. Nothing here requires adopting the
 > [Axioma-XKS format](AXIOMA-XKS.md) — the cases are ordinary and the detectors are cheap.
@@ -10,9 +10,10 @@ states something that stopped being true months ago. Across 143 enterprise RAG d
 invisible to the standard evaluation suite**; roughly 60% of projects that die after a
 successful pilot die on freshness rather than retrieval quality.
 
-The four cases below are from this repository, over a single day. They are small. That is the
-point: none of them looked like a failure while it was happening, and each was passing a green
-check at the time.
+The five cases below are from this repository — four from a single day, the fifth found three
+days later inside the note describing the first four. They are small. That is the point: none
+of them looked like a failure while it was happening, and each was passing a green check at
+the time.
 
 ---
 
@@ -96,15 +97,48 @@ loudly; they disagree in the one field nobody re-reads.
 
 ---
 
-## What the four have in common
+## Case 5 — The paragraph warning about second statements, stated twice
+
+Added 2026-08-15, three days after the first four. It is kept because a note about silent
+staleness that stops collecting cases the moment it is published would be demonstrating its
+own subject rather than documenting it.
+
+**What was wrong.** The specification's section about the four errors above existed twice in
+the same file: a rewritten, accurate version, and directly beneath it the superseded version
+it was meant to replace. They contradicted each other in the plainest possible way. The first
+said not one of the errors was caught by the format. The second closed with the claim that the
+format "made them findable." A reader got two answers to one question, in one section, with
+nothing marking which was current.
+
+**Why it survived.** The rewrite was appended and the old text was never deleted — an edit that
+looks complete in a diff, because the diff shows the good new paragraphs and says nothing about
+the old ones still sitting below. Three days of readings of that file, by author and agents,
+never had both halves on screen at once. Twenty-three lines apart is far enough.
+
+**What caught it.** An agent asked to inventory this corpus for an unrelated purpose, reading
+the file end to end because it had no expectation of what should be there. Not the author
+rereading his own prose, and not `selftest.mjs` — which by then ran 78 assertions, none of
+which look at prose for self-contradiction.
+
+**Generalises to:** every document that was corrected rather than rewritten. The most dangerous
+place for a stale statement is directly underneath the statement that replaced it, because
+that is the one place a reader assumes has been handled.
+
+---
+
+## What the five have in common
 
 **Every one was green at the time.** Not unchecked — *checked, by something that could not see
 the defect.* The gap was never between "tested" and "untested"; it was between a check that
 verifies shape and a check that verifies correspondence with the world.
 
-**Three of the four were found by disagreement, not by inspection.** Two files compared,
-two vendors' models compared, two documents open at once. Nothing found them by looking harder
-at one thing.
+**Four of the five were found by disagreement, not by inspection.** Two files compared,
+two vendors' models compared, two documents open at once, one reader with no expectation of
+what the file should contain. Nothing found them by looking harder at one thing.
+
+**Three of the five were found by a party that did not share the author's assumptions** —
+another vendor's model twice, an agent with no prior reading of the file once. This is the
+single most productive detector in the list below, and the count keeps growing in its favour.
 
 **None of them was found by the format.** The capsule format made the fields exist so a check
 could be written against them. It did not do the checking, and saying otherwise was the first
