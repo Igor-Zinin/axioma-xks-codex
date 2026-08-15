@@ -397,6 +397,46 @@ for (const file of pkoFiles) {
   }
 }
 
+// ── C-09: no published document states the same paragraph twice ──────────────
+//
+// Повод, 15.08. Раздел спецификации о четырёх ошибках лежал в файле ДВАЖДЫ:
+// переписанная честная версия и не удалённая прежняя, прямо под ней, — и они
+// противоречили друг другу. Наверху «ни одну из них формат не поймал», внизу
+// «формат сделал их находимыми». Читатель получал два ответа на один вопрос и
+// ничего, что говорило бы, какой из них текущий.
+//
+// Прожило это трое суток при 78 зелёных утверждениях, потому что ни одно из них
+// не смотрит на прозу. И нашёл это не автор, перечитывавший свой текст, а агент,
+// у которого не было ожидания, что там должно быть, — то есть снова разногласие,
+// а не внимательность. Разбор SILENT-STALENESS называет это Case 5.
+//
+// Почему абзацы, а не строки: правка «допиши сверху, старое потом уберу» всегда
+// оставляет за собой целый блок, а не строку. Порог в 120 символов отсекает
+// заголовки таблиц, разделители и повторяющиеся служебные строки вроде
+// «**Что было не так.**» — они законно встречаются много раз.
+const PROSE_FILES = ["docs/AXIOMA-XKS.md", "docs/SILENT-STALENESS.md", "README.md",
+                     "docs/CHESS-BENCHMARK-V0.1.md", "docs/RESULTS.md"];
+const MIN_PARA = 120;
+for (const rel of PROSE_FILES) {
+  const abs = join(__dirname, rel);
+  if (!existsSync(abs)) {
+    skip(`C-09 · ${rel} states nothing twice`, `файла нет в дереве — проверять нечего, но и «сошлось» сказать не о чем`);
+    continue;
+  }
+  const paras = readFileSync(abs, "utf8")
+    .split(/\n\s*\n/)
+    .map((p) => p.replace(/\s+/g, " ").trim())
+    .filter((p) => p.length >= MIN_PARA);
+  const seen = new Map();
+  const dupes = [];
+  for (const p of paras) {
+    if (seen.has(p)) dupes.push(p.slice(0, 70) + "…");
+    else seen.set(p, true);
+  }
+  assert(dupes.length === 0,
+    `C-09 · ${rel} states no paragraph twice${dupes.length ? ` (repeated: ${dupes.join(" | ")})` : ` (${paras.length} paragraphs checked)`}`);
+}
+
 // ── Print results ─────────────────────────────────────────────────────────────
 const LABEL = { pass: "GREEN  ", fail: "RED    ", skip: "SKIPPED" };
 for (const r of results) {
